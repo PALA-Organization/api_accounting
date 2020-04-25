@@ -1,7 +1,6 @@
-package fr.pala.accounting.dao;
+package fr.pala.accounting.user.dao;
 
-import fr.pala.accounting.model.AccountModel;
-import fr.pala.accounting.model.UserModel;
+import fr.pala.accounting.user.model.UserModel;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +19,7 @@ import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = UserDAO.class)
+@SpringBootTest(classes = UserService.class)
 @RunWith(SpringRunner.class)
 public class UserDAOTest {
 
@@ -28,27 +27,27 @@ public class UserDAOTest {
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    private UserDAO userDAO;
+    private UserService userDAO;
 
     @Test
     public void addUserTest() {
 
-        ArrayList<AccountModel> accounts = new ArrayList<>();
-        UserModel user = new UserModel("", "Test", "test@test.fr", new Date(), new Date(), accounts);
-        UserModel userResult = new UserModel("23424524523412", "Test", "test@test.fr", new Date(), new Date(), accounts);
+        ArrayList<?> accounts = new ArrayList<>();
+        UserModel user = new UserModel("", "Test", "test@test.fr", "Test", new Date(), new Date(), accounts);
+        UserModel userResult = new UserModel("23424524523412", "Test", "test@test.fr", "Test", new Date(), new Date(), accounts);
 
         Mockito.when(mongoTemplate.save(Mockito.any(UserModel.class))).thenReturn(userResult);
 
-        assertThat(userDAO.addUser(user).getUser_id()).isEqualTo("23424524523412");
+        assertThat(userDAO.addUser(user.getName(), user.getEmail(), user.getPassword()).getUser_id()).isEqualTo("23424524523412");
     }
 
     @Test
     public void getAllUsersTest() {
-        ArrayList<AccountModel> accounts = new ArrayList<>();
+        ArrayList<?> accounts = new ArrayList<>();
 
         Mockito.when(mongoTemplate.findAll(UserModel.class))
-                .then(ignoredInvocation -> Arrays.asList(new UserModel("", "Test", "test@test.fr", new Date(), new Date(), accounts),
-                        new UserModel("", "Test", "test@test.fr", new Date(), new Date(), accounts)));
+                .then(ignoredInvocation -> Arrays.asList(new UserModel("", "Test", "test@test.fr", "Test", new Date(), new Date(), accounts),
+                        new UserModel("", "Test", "test@test.fr","Test", new Date(), new Date(), accounts)));
 
         assertThat(userDAO.getAllUsers()).hasSize(2);
     }
@@ -56,12 +55,12 @@ public class UserDAOTest {
     @Test
     public void getUserByIdTest(){
         String user_id= "34234234234";
-        ArrayList<AccountModel> accounts = new ArrayList<>();
+        ArrayList<?> accounts = new ArrayList<>();
 
         Query query = new Query();
         query.addCriteria(Criteria.where("user_id").is(user_id));
         Mockito.when(mongoTemplate.findOne(query, UserModel.class))
-                .then(ignoredInvocation -> new UserModel("34234234234", "Test", "test@test.fr", new Date(), new Date(), accounts));
+                .then(ignoredInvocation -> new UserModel("34234234234", "Test", "test@test.fr","Test", new Date(), new Date(), accounts));
 
         assertThat(userDAO.getUserById(user_id).getName()).isEqualTo("Test");
     }

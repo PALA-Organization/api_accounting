@@ -1,6 +1,7 @@
-package fr.pala.accounting.dao;
+package fr.pala.accounting.user.dao;
 
-import fr.pala.accounting.model.UserModel;
+import fr.pala.accounting.exception.UserAlreadyExistsException;
+import fr.pala.accounting.user.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -8,19 +9,27 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
-public class UserDAO {
+public class UserService {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    public UserDAO(){
+    public UserService(){
     }
 
-    public UserModel addUser(UserModel user) {
+    public UserModel addUser(String name, String email, String password) throws UserAlreadyExistsException {
+
+       if (getUserByEmail(email) != null) {
+            throw new UserAlreadyExistsException(
+                    "There is an user with that email address : " + email);
+        }
+        UserModel user = new UserModel("", name, email, password, new Date(), new Date(), new ArrayList<>());
         return mongoTemplate.save(user);
     }
 
@@ -31,6 +40,12 @@ public class UserDAO {
     public UserModel getUserById(String user_id) {
         Query query = new Query();
         query.addCriteria(Criteria.where("user_id").is(user_id));
+        return mongoTemplate.findOne(query, UserModel.class);
+    }
+
+    public UserModel getUserByEmail(String email) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("email").is(email));
         return mongoTemplate.findOne(query, UserModel.class);
     }
 
