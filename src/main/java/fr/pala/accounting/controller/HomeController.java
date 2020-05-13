@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Date;
 
-@RestController
+@RestController("/")
 public class HomeController implements ErrorController {
 
     @Autowired
@@ -20,9 +20,9 @@ public class HomeController implements ErrorController {
 
     private static final String PATH = "/error";
 
-    @GetMapping("/")
-    public String writeHello() {
-        return "Welcome home";
+    @GetMapping
+    public String index() {
+        return "home";
     }
 
     @RequestMapping(value = PATH)
