@@ -1,15 +1,15 @@
 package fr.pala.accounting.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
 @Document(collection = "Transaction")
-@Getter
-@Setter
+@Data
+@Accessors(chain = true)
 public class TransactionModel {
 
     @Id
@@ -30,4 +30,6 @@ public class TransactionModel {
         this.amount = amount;
         this.description = description;
     }
+    public TransactionModel(){}
+
 }

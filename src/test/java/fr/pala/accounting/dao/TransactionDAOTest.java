@@ -2,7 +2,8 @@ package fr.pala.accounting.dao;
 
 import fr.pala.accounting.model.AccountModel;
 import fr.pala.accounting.model.TransactionModel;
-import fr.pala.accounting.model.UserModel;
+import fr.pala.accounting.user.dao.UserDAO;
+import fr.pala.accounting.user.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -42,7 +43,7 @@ public class TransactionDAOTest {
         Query query = new Query();
         query.addCriteria(Criteria.where("user_id").is(user_id));
         Mockito.when(mongoTemplate.findOne(query, UserModel.class))
-                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test@test.fr", new Date(), new Date(), accounts));
+                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test@test.fr", "test", new Date(), new Date(), accounts));
 
         assertThat(transactionDAO.getAllTransactionsOfAccount(user_id, account_id)).hasSize(0);
     }
@@ -64,7 +65,7 @@ public class TransactionDAOTest {
         Query query = new Query();
         query.addCriteria(Criteria.where("user_id").is(user_id));
         Mockito.when(mongoTemplate.findOne(query, UserModel.class))
-                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test@test.fr", new Date(), new Date(), accounts));
+                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test@test.fr", "test", new Date(), new Date(), accounts));
 
         assertThat(transactionDAO.getAllTransactionsOfAccount(user_id, account_id)).hasSize(2);
     }
@@ -74,8 +75,14 @@ public class TransactionDAOTest {
         //parameters of getTransaction
         String transactionId = "223435345345";
 
-        TransactionModel transaction = new TransactionModel("223435345345", "Test", "Auchan",
-                "Test", new Date(), 33.70, "Test");
+        TransactionModel transaction = new TransactionModel()
+                .setTransaction_id("223435345345")
+                .setType("Test")
+                .setShop_name("Auchan")
+                .setShop_address("Test")
+                .setDate(new Date())
+                .setAmount(33.70)
+                .setDescription("Test");
 
         Query query = new Query();
         query.addCriteria(Criteria.where("transaction_id").is(transactionId));
@@ -92,8 +99,15 @@ public class TransactionDAOTest {
         //parameters of addTransaction
         String user_id = "12";
         String account_id = "3234234";
-        TransactionModel transaction = new TransactionModel("223435345345", "Test", "Auchan",
-                "Test", new Date(), 33.70, "Test");
+
+        TransactionModel transaction = new TransactionModel()
+                .setTransaction_id("223435345345")
+                .setType("Test")
+                .setShop_name("Auchan")
+                .setShop_address("Test")
+                .setDate(new Date())
+                .setAmount(33.70)
+                .setDescription("Test");
 
         //Mock the account get
         ArrayList<String> transactionsIds = new ArrayList<String>();
@@ -111,7 +125,7 @@ public class TransactionDAOTest {
         Query query = new Query();
         query.addCriteria(Criteria.where("user_id").is(user_id));
         Mockito.when(mongoTemplate.findOne(query, UserModel.class))
-                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test@test.fr", new Date(), new Date(), accounts));
+                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test@test.fr", "test", new Date(), new Date(), accounts));
 
         Mockito.when(mongoTemplate.save(Mockito.any(TransactionModel.class))).thenReturn(transaction);
 

@@ -1,7 +1,8 @@
 package fr.pala.accounting.dao;
 
 import fr.pala.accounting.model.AccountModel;
-import fr.pala.accounting.model.UserModel;
+import fr.pala.accounting.user.dao.UserDAO;
+import fr.pala.accounting.user.model.UserModel;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -27,7 +28,7 @@ public class AccountDAO {
         accountModel.setAccount_id(new ObjectId().toString());
 
         UserModel user = userDAO.getUserById(user_id);
-        List<AccountModel> accounts = user.getAccounts();
+        List<AccountModel> accounts = (List<AccountModel>) user.getAccounts();
         accounts.add(accountModel);
 
         Query query = new Query();
@@ -46,7 +47,7 @@ public class AccountDAO {
         UserModel user = mongoTemplate.findOne(query, UserModel.class);
 
         if(user != null){
-            return user.getAccounts();
+            return (List<AccountModel>) user.getAccounts();
         }
         return null;
     }
@@ -71,7 +72,7 @@ public class AccountDAO {
 
     public void updateAccount(String user_id, String account_id, AccountModel account) {
         UserModel user = userDAO.getUserById(user_id);
-        List<AccountModel> accounts = user.getAccounts();
+        List<AccountModel> accounts = (List<AccountModel>) user.getAccounts();
 
         for (AccountModel accountModel : accounts) {
             if (accountModel.getAccount_id().equals(account_id)) {
@@ -91,7 +92,7 @@ public class AccountDAO {
     public void deleteAccount(String user_id, String account_id) {
 
         UserModel user = userDAO.getUserById(user_id);
-        List<AccountModel> accounts = user.getAccounts();
+        List<AccountModel> accounts = (List<AccountModel>) user.getAccounts();
 
         for (int i = 0; i < accounts.size(); i++) {
             if(accounts.get(i).getAccount_id().equals(account_id)){

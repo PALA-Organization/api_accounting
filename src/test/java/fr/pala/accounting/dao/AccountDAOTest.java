@@ -1,6 +1,7 @@
 package fr.pala.accounting.dao;
 import fr.pala.accounting.model.AccountModel;
-import fr.pala.accounting.model.UserModel;
+import fr.pala.accounting.user.dao.UserDAO;
+import fr.pala.accounting.user.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -36,7 +37,7 @@ public class AccountDAOTest {
         Query query = new Query();
         query.addCriteria(Criteria.where("user_id").is(user_id));
         Mockito.when(mongoTemplate.findOne(query, UserModel.class))
-                .then(ignoredInvocation -> new UserModel("234", "Test", "test@test.fr", new Date(), new Date(), new ArrayList<AccountModel>()));
+                .then(ignoredInvocation -> new UserModel("234", "Test", "test@test.fr", "test", new Date(), new Date(), new ArrayList<AccountModel>()));
 
         //mock of the account save
         AccountModel accountResult = new AccountModel("34234234", 23.30, new ArrayList<>());
@@ -61,7 +62,7 @@ public class AccountDAOTest {
         Query query = new Query();
         query.addCriteria(Criteria.where("user_id").is(user_id));
         Mockito.when(mongoTemplate.findOne(query, UserModel.class))
-                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test@test.fr", new Date(), new Date(), accounts));
+                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test", "test@test.fr", new Date(), new Date(), accounts));
 
         assertThat(accountDAO.getAllAccountsOfUsers(user_id)).hasSize(2);
     }
@@ -85,7 +86,7 @@ public class AccountDAOTest {
         Query query1 = new Query();
         query1.addCriteria(Criteria.where("user_id").is(user_id));
         Mockito.when(mongoTemplate.findOne(query1, UserModel.class))
-                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test@test.fr", new Date(), new Date(), accounts));
+                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test", "test@test.fr", new Date(), new Date(), accounts));
 
         assertThat(accountDAO.getAccountOfUser(user_id, account_id).getAccount_id()).isEqualTo(account_id);
     }
@@ -109,7 +110,7 @@ public class AccountDAOTest {
         Query query = new Query();
         query.addCriteria(Criteria.where("user_id").is(user_id));
         Mockito.when(mongoTemplate.findOne(query, UserModel.class))
-                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test@test.fr", new Date(), new Date(), accounts));
+                .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test", "test@test.fr", new Date(), new Date(), accounts));
 
         assertThat(accountDAO.getAmountOfAccount(user_id, account_id)).isEqualTo(234.55);
     }
