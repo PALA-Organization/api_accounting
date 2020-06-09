@@ -16,8 +16,8 @@ import static fr.pala.accounting.utils.file.downloadUtils.downloadImage;
 @RestController
 @RequestMapping("/account/{accountId}/transaction/")
 public class TransactionController {
-    final OCRSpaceService ocrSpaceService;
-    final TransactionService transactionService;
+    private final OCRSpaceService ocrSpaceService;
+    private final TransactionService transactionService;
     private static final String PATH = "/error";
 
     public TransactionController(TransactionService transactionService, OCRSpaceService ocrSpaceService) {
