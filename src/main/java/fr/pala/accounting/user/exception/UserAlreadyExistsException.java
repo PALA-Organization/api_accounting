@@ -1,4 +1,4 @@
-package fr.pala.accounting.exception;
+package fr.pala.accounting.user.exception;
 
 public final class UserAlreadyExistsException extends RuntimeException {
 

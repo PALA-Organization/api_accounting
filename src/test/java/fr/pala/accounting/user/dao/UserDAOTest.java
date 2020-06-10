@@ -1,6 +1,8 @@
 package fr.pala.accounting.user.dao;
 
+import fr.pala.accounting.user.UserDAO;
 import fr.pala.accounting.user.model.UserModel;
+import fr.pala.accounting.account.model.AccountModel;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +21,7 @@ import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = UserService.class)
+@SpringBootTest(classes = UserDAO.class)
 @RunWith(SpringRunner.class)
 public class UserDAOTest {
 
@@ -27,14 +29,14 @@ public class UserDAOTest {
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    private UserService userDAO;
+    private UserDAO userDAO;
 
     @Test
     public void addUserTest() {
 
-        ArrayList<?> accounts = new ArrayList<>();
-        UserModel user = new UserModel("", "Test", "test@test.fr", "Test", new Date(), new Date(), accounts);
-        UserModel userResult = new UserModel("23424524523412", "Test", "test@test.fr", "Test", new Date(), new Date(), accounts);
+        ArrayList<AccountModel> accounts = new ArrayList<>();
+        UserModel user = new UserModel("", "Test", "test@test.fr", "test", new Date(), new Date(), accounts);
+        UserModel userResult = new UserModel("23424524523412", "Test", "test@test.fr", "test", new Date(), new Date(), accounts);
 
         Mockito.when(mongoTemplate.save(Mockito.any(UserModel.class))).thenReturn(userResult);
 
@@ -46,8 +48,8 @@ public class UserDAOTest {
         ArrayList<?> accounts = new ArrayList<>();
 
         Mockito.when(mongoTemplate.findAll(UserModel.class))
-                .then(ignoredInvocation -> Arrays.asList(new UserModel("", "Test", "test@test.fr", "Test", new Date(), new Date(), accounts),
-                        new UserModel("", "Test", "test@test.fr","Test", new Date(), new Date(), accounts)));
+                .then(ignoredInvocation -> Arrays.asList(new UserModel("", "Test", "test@test.fr", "test", new Date(), new Date(), accounts),
+                        new UserModel("", "Test", "test@test.fr", "test", new Date(), new Date(), accounts)));
 
         assertThat(userDAO.getAllUsers()).hasSize(2);
     }

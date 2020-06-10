@@ -1,6 +1,6 @@
-package fr.pala.accounting.user.dao;
+package fr.pala.accounting.user;
 
-import fr.pala.accounting.exception.UserAlreadyExistsException;
+import fr.pala.accounting.user.exception.UserAlreadyExistsException;
 import fr.pala.accounting.user.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -14,13 +14,13 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserDAO {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    public UserService(){
+    public UserDAO(){
     }
 
     public UserModel addUser(String name, String email, String password) throws UserAlreadyExistsException {
@@ -30,6 +30,7 @@ public class UserService {
                     "There is an user with that email address : " + email);
         }
         UserModel user = new UserModel("", name, email, password, new Date(), new Date(), new ArrayList<>());
+
         return mongoTemplate.save(user);
     }
 

@@ -1,10 +1,7 @@
-package fr.pala.accounting.user.controller;
+package fr.pala.accounting.user;
 
-import fr.pala.accounting.exception.UserAlreadyExistsException;
-import fr.pala.accounting.user.dao.UserService;
+import fr.pala.accounting.user.exception.UserAlreadyExistsException;
 import fr.pala.accounting.user.model.UserDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,18 +15,18 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
-public class UserController implements ErrorController {
+public class UserController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserDAO userService;
+    private final PasswordEncoder passwordEncoder;
 
-
-    private static final String PATH = "/error";
+    public UserController(PasswordEncoder passwordEncoder, UserDAO userService) {
+        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
+    }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createAccount(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> createAccount(@Valid @RequestBody UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         try{
@@ -40,16 +37,5 @@ public class UserController implements ErrorController {
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-
-    @RequestMapping(value = PATH)
-    public String error() {
-        return "Error";
-    }
-
-    @Override
-    public String getErrorPath() {
-        return PATH;
     }
 }
