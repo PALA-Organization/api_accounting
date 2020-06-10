@@ -39,20 +39,6 @@ public class HomeController implements ErrorController {
         return PATH;
     }
 
-    @RequestMapping("/testroute")
-    public String addUser() {
-        ArrayList<AccountModel> accounts = new ArrayList<>();
-
-        AccountModel account = new AccountModel("", 23.3, null);
-        accounts.add(account);
-
-        UserModel user = new UserModel(null, "Test", "test@test.fr", new Date(),
-                new Date(), accounts);
-
-        userDAO.addUser(user);
-        return "Test user created";
-    }
-
     @RequestMapping("/addUsers")
     public String addUsers() {
         ArrayList<AccountModel> accounts = new ArrayList<>();
@@ -60,7 +46,7 @@ public class HomeController implements ErrorController {
         AccountModel account = new AccountModel("", 23.3, null);
         accounts.add(account);
 
-        UserModel user = new UserModel(null, "Test", "test@test.fr", new Date(),
+        UserModel user = new UserModel(null, "Test", "test@test.fr", "Test", new Date(),
                 new Date(), accounts);
 
         userDAO.addUser(user);
