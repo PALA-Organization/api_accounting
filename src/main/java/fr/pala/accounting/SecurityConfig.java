@@ -30,9 +30,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                /*.antMatchers("/api/**").
-                .antMatchers("/admin/**").hasRole("ADMIN")*/
-                .antMatchers("/account/{accountId}/transaction/**").permitAll()
+                .antMatchers("/*").permitAll()
+                /*.antMatchers("/admin/**").hasRole("ADMIN")*/
                 .anyRequest()
                 .authenticated()
                 .and()
