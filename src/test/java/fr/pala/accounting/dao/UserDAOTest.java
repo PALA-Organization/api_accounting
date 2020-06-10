@@ -1,8 +1,9 @@
 package fr.pala.accounting.dao;
 
 import fr.pala.accounting.model.AccountModel;
-import fr.pala.accounting.model.UserModel;
 
+import fr.pala.accounting.user.dao.UserDAO;
+import fr.pala.accounting.user.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -34,8 +35,8 @@ public class UserDAOTest {
     public void addUserTest() {
 
         ArrayList<AccountModel> accounts = new ArrayList<>();
-        UserModel user = new UserModel("", "Test", "test@test.fr", new Date(), new Date(), accounts);
-        UserModel userResult = new UserModel("23424524523412", "Test", "test@test.fr", new Date(), new Date(), accounts);
+        UserModel user = new UserModel("", "Test", "test@test.fr", "test", new Date(), new Date(), accounts);
+        UserModel userResult = new UserModel("23424524523412", "Test", "test@test.fr", "test", new Date(), new Date(), accounts);
 
         Mockito.when(mongoTemplate.save(Mockito.any(UserModel.class))).thenReturn(userResult);
 
@@ -47,8 +48,8 @@ public class UserDAOTest {
         ArrayList<AccountModel> accounts = new ArrayList<>();
 
         Mockito.when(mongoTemplate.findAll(UserModel.class))
-                .then(ignoredInvocation -> Arrays.asList(new UserModel("", "Test", "test@test.fr", new Date(), new Date(), accounts),
-                        new UserModel("", "Test", "test@test.fr", new Date(), new Date(), accounts)));
+                .then(ignoredInvocation -> Arrays.asList(new UserModel("", "Test", "test@test.fr", "test", new Date(), new Date(), accounts),
+                        new UserModel("", "Test", "test@test.fr", "test", new Date(), new Date(), accounts)));
 
         assertThat(userDAO.getAllUsers()).hasSize(2);
     }
@@ -61,7 +62,7 @@ public class UserDAOTest {
         Query query = new Query();
         query.addCriteria(Criteria.where("user_id").is(user_id));
         Mockito.when(mongoTemplate.findOne(query, UserModel.class))
-                .then(ignoredInvocation -> new UserModel("34234234234", "Test", "test@test.fr", new Date(), new Date(), accounts));
+                .then(ignoredInvocation -> new UserModel("34234234234", "Test", "test@test.fr", "test", new Date(), new Date(), accounts));
 
         assertThat(userDAO.getUserById(user_id).getName()).isEqualTo("Test");
     }

@@ -1,8 +1,8 @@
 package fr.pala.accounting.controller;
 
-import fr.pala.accounting.dao.UserDAO;
 import fr.pala.accounting.model.AccountModel;
-import fr.pala.accounting.model.UserModel;
+import fr.pala.accounting.user.dao.UserDAO;
+import fr.pala.accounting.user.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,17 +12,21 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Date;
 
-@RestController
+@RestController("/")
 public class HomeController implements ErrorController {
 
-    @Autowired
+    final
     UserDAO userDAO;
 
     private static final String PATH = "/error";
 
-    @GetMapping("/")
-    public String writeHello() {
-        return "Welcome home";
+    public HomeController(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    @GetMapping
+    public String index() {
+        return "home";
     }
 
     @RequestMapping(value = PATH)
