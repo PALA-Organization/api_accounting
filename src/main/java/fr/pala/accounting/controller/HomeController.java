@@ -48,4 +48,18 @@ public class HomeController implements ErrorController {
         userDAO.addUser(user);
         return "Test user created";
     }
+
+    @RequestMapping("/addUsers")
+    public String addUsers() {
+        ArrayList<AccountModel> accounts = new ArrayList<>();
+
+        AccountModel account = new AccountModel("", 23.3, null);
+        accounts.add(account);
+
+        UserModel user = new UserModel(null, "Test", "test@test.fr", new Date(),
+                new Date(), accounts);
+
+        userDAO.addUser(user);
+        return "Test user created";
+    }
 }
