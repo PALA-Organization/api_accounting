@@ -1,7 +1,7 @@
 package fr.pala.accounting.dao;
 
-import fr.pala.accounting.account.model.AccountDAO;
-import fr.pala.accounting.account.model.AccountModel;
+import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
+import fr.pala.accounting.account.infrastructure.dao.AccountModel;
 import fr.pala.accounting.transaction.model.TransactionModel;
 import fr.pala.accounting.transaction.TransactionDAO;
 import fr.pala.accounting.user.UserDAO;

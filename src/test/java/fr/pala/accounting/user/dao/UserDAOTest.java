@@ -2,7 +2,7 @@ package fr.pala.accounting.user.dao;
 
 import fr.pala.accounting.user.UserDAO;
 import fr.pala.accounting.user.model.UserModel;
-import fr.pala.accounting.account.model.AccountModel;
+import fr.pala.accounting.account.infrastructure.dao.AccountModel;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

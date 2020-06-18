@@ -1,7 +1,7 @@
 package fr.pala.accounting.transaction;
 
-import fr.pala.accounting.account.model.AccountDAO;
-import fr.pala.accounting.account.model.AccountModel;
+import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
+import fr.pala.accounting.account.infrastructure.dao.AccountModel;
 import fr.pala.accounting.transaction.model.TransactionModel;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

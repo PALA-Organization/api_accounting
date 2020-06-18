@@ -1,5 +1,6 @@
-package fr.pala.accounting.account.model;
+package fr.pala.accounting.account.infrastructure.dao;
 
+import fr.pala.accounting.account.infrastructure.dao.AccountModel;
 import fr.pala.accounting.user.UserDAO;
 import fr.pala.accounting.user.model.UserModel;
 import org.bson.types.ObjectId;
