@@ -1,4 +1,4 @@
-package fr.pala.accounting.user.exception;
+package fr.pala.accounting.user.domain.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

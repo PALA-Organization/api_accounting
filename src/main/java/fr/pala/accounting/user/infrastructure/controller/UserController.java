@@ -1,10 +1,9 @@
-package fr.pala.accounting.user;
+package fr.pala.accounting.user.infrastructure.controller;
 
-import fr.pala.accounting.user.exception.UserAlreadyExistsException;
-import fr.pala.accounting.user.model.UserDTO;
+import fr.pala.accounting.user.domain.exception.UserAlreadyExistsException;
+import fr.pala.accounting.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,25 +16,21 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserDAO userService;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
-    public UserController(PasswordEncoder passwordEncoder, UserDAO userService) {
-        this.passwordEncoder = passwordEncoder;
+
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("/create")
     public ResponseEntity<String> createAccount(@Valid @RequestBody UserDTO userDTO) {
-        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-
         try{
-            userService.addUser(userDTO.getName(), userDTO.getEmail(), userDTO.getPassword());
+            userService.createUser(userDTO);
         }
         catch (UserAlreadyExistsException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
