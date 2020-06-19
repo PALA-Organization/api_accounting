@@ -23,14 +23,7 @@ public class UserDAO {
     public UserDAO(){
     }
 
-    public UserModel addUser(String name, String email, String password) throws UserAlreadyExistsException {
-
-       if (getUserByEmail(email) != null) {
-            throw new UserAlreadyExistsException(
-                    "There is an user with that email address : " + email);
-        }
-        UserModel user = new UserModel("", name, email, password, new Date(), new Date(), new ArrayList<>());
-
+    public UserModel addUser(UserModel user) throws UserAlreadyExistsException {
         return mongoTemplate.save(user);
     }
 
