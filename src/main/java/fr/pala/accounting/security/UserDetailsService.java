@@ -1,7 +1,7 @@
 package fr.pala.accounting.security;
 
-import fr.pala.accounting.user.UserDAO;
-import fr.pala.accounting.user.model.UserDTO;
+import fr.pala.accounting.user.infrastructure.dao.UserDAO;
+import fr.pala.accounting.user.infrastructure.controller.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.userdetails.User;

@@ -1,7 +1,7 @@
 package fr.pala.accounting.account.model;
 
-import fr.pala.accounting.user.UserDAO;
-import fr.pala.accounting.user.model.UserModel;
+import fr.pala.accounting.user.infrastructure.dao.UserDAO;
+import fr.pala.accounting.user.domain.model.UserModel;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

@@ -3,9 +3,9 @@ package fr.pala.accounting.transaction;
 import fr.pala.accounting.transaction.exception.TransactionNotCreatedException;
 import fr.pala.accounting.transaction.model.TransactionDTO;
 import fr.pala.accounting.transaction.model.TransactionModel;
-import fr.pala.accounting.user.UserDAO;
-import fr.pala.accounting.user.exception.UserNotFoundException;
-import fr.pala.accounting.user.model.UserModel;
+import fr.pala.accounting.user.infrastructure.dao.UserDAO;
+import fr.pala.accounting.user.domain.exception.UserNotFoundException;
+import fr.pala.accounting.user.domain.model.UserModel;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

@@ -1,7 +1,7 @@
-package fr.pala.accounting.user;
+package fr.pala.accounting.user.infrastructure.dao;
 
-import fr.pala.accounting.user.exception.UserAlreadyExistsException;
-import fr.pala.accounting.user.model.UserModel;
+import fr.pala.accounting.user.domain.exception.UserAlreadyExistsException;
+import fr.pala.accounting.user.domain.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

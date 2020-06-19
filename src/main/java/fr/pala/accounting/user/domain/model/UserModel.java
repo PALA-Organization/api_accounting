@@ -1,5 +1,6 @@
-package fr.pala.accounting.user.model;
+package fr.pala.accounting.user.domain.model;
 
+import fr.pala.accounting.user.infrastructure.controller.UserDTO;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
