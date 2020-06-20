@@ -32,7 +32,7 @@ public class TransactionDAO {
             return transactionResults;
         }
 
-        ArrayList<String> transactions_ids = accountModel.getTransactions_ids();
+        List<String> transactions_ids = accountModel.getTransactions_ids();
 
         for (String transactions_id : transactions_ids) {
             Query query = new Query();
@@ -54,7 +54,7 @@ public class TransactionDAO {
 
         //add transaction to account
         AccountModel account = accountDAO.getAccountOfUser(user_id, account_id);
-        ArrayList<String> transactions_ids = account.getTransactions_ids();
+        List<String> transactions_ids = account.getTransactions_ids();
         transactions_ids.add(transactionResult.getTransaction_id());
         account.setTransactions_ids(transactions_ids);
         accountDAO.updateAccount(user_id, account_id, account);
@@ -80,7 +80,7 @@ public class TransactionDAO {
         mongoTemplate.remove(transaction);
 
         AccountModel account = accountDAO.getAccountOfUser(user_id, account_id);
-        ArrayList<String> transactions_ids = account.getTransactions_ids();
+        List<String> transactions_ids = account.getTransactions_ids();
 
         for (int i = 0; i < transactions_ids.size(); i++) {
             if(transactions_ids.get(i).equals(transaction.getTransaction_id())){
