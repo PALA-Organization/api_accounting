@@ -3,7 +3,6 @@ package fr.pala.accounting.account.infrastructure.dao;
 import fr.pala.accounting.transaction.TransactionDAO;
 import fr.pala.accounting.user.UserDAO;
 import fr.pala.accounting.user.model.UserModel;
-import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +11,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
