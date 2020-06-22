@@ -1,8 +1,8 @@
 package fr.pala.accounting.account.infrastructure.dao;
 
 import fr.pala.accounting.transaction.TransactionDAO;
-import fr.pala.accounting.user.UserDAO;
-import fr.pala.accounting.user.model.UserModel;
+import fr.pala.accounting.user.infrastructure.dao.UserDAO;
+import fr.pala.accounting.user.domain.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

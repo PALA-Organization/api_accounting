@@ -49,15 +49,15 @@ public class TransactionDAO {
         return mongoTemplate.findOne(query, TransactionModel.class);
     }
 
-    public TransactionModel addTransaction(String user_id, String account_id, TransactionModel transactionModel) {
+    public TransactionModel addTransaction(String email, String account_id, TransactionModel transactionModel) {
         TransactionModel transactionResult = mongoTemplate.save(transactionModel);
 
         //add transaction to account
-        AccountModel account = accountDAO.getAccountOfUser(user_id, account_id);
+        AccountModel account = accountDAO.getAccountOfUser(email, account_id);
         List<String> transactions_ids = account.getTransactions_ids();
         transactions_ids.add(transactionResult.getTransaction_id());
         account.setTransactions_ids(transactions_ids);
-        accountDAO.updateAccount(user_id, account_id, account);
+        accountDAO.updateAccount(email, account_id, account);
         return transactionResult;
     }
 
@@ -75,11 +75,11 @@ public class TransactionDAO {
         mongoTemplate.findAndModify(query, update, TransactionModel.class);
     }
 
-    public void deleteTransaction(String user_id, String account_id, TransactionModel transaction) {
+    public void deleteTransaction(String email, String account_id, TransactionModel transaction) {
 
         mongoTemplate.remove(transaction);
 
-        AccountModel account = accountDAO.getAccountOfUser(user_id, account_id);
+        AccountModel account = accountDAO.getAccountOfUser(email, account_id);
         List<String> transactions_ids = account.getTransactions_ids();
 
         for (int i = 0; i < transactions_ids.size(); i++) {
@@ -89,7 +89,7 @@ public class TransactionDAO {
             }
         }
         account.setTransactions_ids(transactions_ids);
-        accountDAO.updateAccount(user_id, account_id, account);
+        accountDAO.updateAccount(email, account_id, account);
     }
 
 }

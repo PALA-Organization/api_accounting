@@ -1,7 +1,7 @@
 package fr.pala.accounting.account.infrastructure.dao;
 
-import fr.pala.accounting.user.UserDAO;
-import fr.pala.accounting.user.model.UserModel;
+import fr.pala.accounting.user.infrastructure.dao.UserDAO;
+import fr.pala.accounting.user.domain.model.UserModel;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -80,8 +80,8 @@ public class AccountDAO {
 
 
 
-    public void updateAccount(String user_id, String account_id, AccountModel account) {
-        UserModel user = userDAO.getUserById(user_id);
+    public void updateAccount(String email, String account_id, AccountModel account) {
+        UserModel user = userDAO.getUserByEmail(email);
         List<AccountModel> accounts = user.getAccounts();
 
         for (AccountModel accountModel : accounts) {

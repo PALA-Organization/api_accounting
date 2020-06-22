@@ -1,7 +1,7 @@
-package fr.pala.accounting.user;
+package fr.pala.accounting.user.infrastructure.dao;
 
-import fr.pala.accounting.user.exception.UserAlreadyExistsException;
-import fr.pala.accounting.user.model.UserModel;
+import fr.pala.accounting.user.domain.exception.UserAlreadyExistsException;
+import fr.pala.accounting.user.domain.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -23,14 +23,7 @@ public class UserDAO {
     public UserDAO(){
     }
 
-    public UserModel addUser(String name, String email, String password) throws UserAlreadyExistsException {
-
-       if (getUserByEmail(email) != null) {
-            throw new UserAlreadyExistsException(
-                    "There is an user with that email address : " + email);
-        }
-        UserModel user = new UserModel("", name, email, password, new Date(), new Date(), new ArrayList<>());
-
+    public UserModel addUser(UserModel user) throws UserAlreadyExistsException {
         return mongoTemplate.save(user);
     }
 

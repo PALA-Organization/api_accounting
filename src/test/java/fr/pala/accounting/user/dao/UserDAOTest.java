@@ -1,8 +1,8 @@
 package fr.pala.accounting.user.dao;
 
 import fr.pala.accounting.account.infrastructure.dao.AccountModel;
-import fr.pala.accounting.user.UserDAO;
-import fr.pala.accounting.user.model.UserModel;
+import fr.pala.accounting.user.domain.model.UserModel;
+import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -39,7 +39,7 @@ public class UserDAOTest {
 
         Mockito.when(mongoTemplate.save(Mockito.any(UserModel.class))).thenReturn(userResult);
 
-        assertThat(userDAO.addUser(user.getName(), user.getEmail(), user.getPassword()).getUser_id()).isEqualTo("23424524523412");
+        assertThat(userDAO.addUser(user).getUser_id()).isEqualTo("23424524523412");
     }
 
     @Test

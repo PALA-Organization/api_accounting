@@ -2,8 +2,8 @@ package fr.pala.accounting.account.use_case;
 
 import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
 import fr.pala.accounting.account.infrastructure.dao.AccountModel;
-import fr.pala.accounting.user.UserDAO;
-import fr.pala.accounting.user.model.UserModel;
+import fr.pala.accounting.user.domain.model.UserModel;
+import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
