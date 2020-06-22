@@ -1,5 +1,6 @@
 package fr.pala.accounting.security;
 
+import fr.pala.accounting.user.domain.model.UserModel;
 import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import fr.pala.accounting.user.infrastructure.controller.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class UserDetailsService implements org.springframework.security.core.use
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserDTO appUser = userService.getUserByEmail(email).toDTO();
+        UserModel appUser = userService.getUserByEmail(email);
 
         if(appUser == null){
             throw new AuthenticationServiceException("email " + email + " not found");

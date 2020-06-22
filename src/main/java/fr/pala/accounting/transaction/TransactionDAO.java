@@ -1,7 +1,7 @@
 package fr.pala.accounting.transaction;
 
-import fr.pala.accounting.account.model.AccountDAO;
-import fr.pala.accounting.account.model.AccountModel;
+import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
+import fr.pala.accounting.account.infrastructure.dao.AccountModel;
 import fr.pala.accounting.transaction.model.TransactionModel;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -32,7 +32,7 @@ public class TransactionDAO {
             return transactionResults;
         }
 
-        ArrayList<String> transactions_ids = accountModel.getTransactions_ids();
+        List<String> transactions_ids = accountModel.getTransactions_ids();
 
         for (String transactions_id : transactions_ids) {
             Query query = new Query();
@@ -49,15 +49,15 @@ public class TransactionDAO {
         return mongoTemplate.findOne(query, TransactionModel.class);
     }
 
-    public TransactionModel addTransaction(String user_id, String account_id, TransactionModel transactionModel) {
+    public TransactionModel addTransaction(String email, String account_id, TransactionModel transactionModel) {
         TransactionModel transactionResult = mongoTemplate.save(transactionModel);
 
         //add transaction to account
-        AccountModel account = accountDAO.getAccountOfUser(user_id, account_id);
-        ArrayList<String> transactions_ids = account.getTransactions_ids();
+        AccountModel account = accountDAO.getAccountOfUser(email, account_id);
+        List<String> transactions_ids = account.getTransactions_ids();
         transactions_ids.add(transactionResult.getTransaction_id());
         account.setTransactions_ids(transactions_ids);
-        accountDAO.updateAccount(user_id, account_id, account);
+        accountDAO.updateAccount(email, account_id, account);
         return transactionResult;
     }
 
@@ -75,12 +75,12 @@ public class TransactionDAO {
         mongoTemplate.findAndModify(query, update, TransactionModel.class);
     }
 
-    public void deleteTransaction(String user_id, String account_id, TransactionModel transaction) {
+    public void deleteTransaction(String email, String account_id, TransactionModel transaction) {
 
         mongoTemplate.remove(transaction);
 
-        AccountModel account = accountDAO.getAccountOfUser(user_id, account_id);
-        ArrayList<String> transactions_ids = account.getTransactions_ids();
+        AccountModel account = accountDAO.getAccountOfUser(email, account_id);
+        List<String> transactions_ids = account.getTransactions_ids();
 
         for (int i = 0; i < transactions_ids.size(); i++) {
             if(transactions_ids.get(i).equals(transaction.getTransaction_id())){
@@ -89,7 +89,7 @@ public class TransactionDAO {
             }
         }
         account.setTransactions_ids(transactions_ids);
-        accountDAO.updateAccount(user_id, account_id, account);
+        accountDAO.updateAccount(email, account_id, account);
     }
 
 }
