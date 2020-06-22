@@ -1,6 +1,6 @@
 package fr.pala.accounting.user.infrastructure.controller;
 
-import fr.pala.accounting.user.domain.exception.UserAlreadyExistsException;
+import fr.pala.accounting.user.service.exception.UserAlreadyExistsException;
 import fr.pala.accounting.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

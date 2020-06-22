@@ -1,10 +1,10 @@
-package fr.pala.accounting.transaction;
+package fr.pala.accounting.transaction.service;
 
-import fr.pala.accounting.transaction.exception.TransactionNotCreatedException;
-import fr.pala.accounting.transaction.model.TransactionDTO;
-import fr.pala.accounting.transaction.model.TransactionModel;
+import fr.pala.accounting.transaction.infrastructure.dao.TransactionDAO;
+import fr.pala.accounting.transaction.infrastructure.controller.TransactionDTO;
+import fr.pala.accounting.transaction.domain.model.TransactionModel;
 import fr.pala.accounting.user.infrastructure.dao.UserDAO;
-import fr.pala.accounting.user.domain.exception.UserNotFoundException;
+import fr.pala.accounting.user.service.exception.UserNotFoundException;
 import fr.pala.accounting.user.domain.model.UserModel;
 import org.springframework.stereotype.Service;
 

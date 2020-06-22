@@ -1,4 +1,4 @@
-package fr.pala.accounting.account.infrastructure.controller;
+package fr.pala.accounting.account.service.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

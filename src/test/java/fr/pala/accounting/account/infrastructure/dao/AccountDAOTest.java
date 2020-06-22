@@ -1,6 +1,6 @@
 package fr.pala.accounting.account.infrastructure.dao;
 
-import fr.pala.accounting.transaction.TransactionDAO;
+import fr.pala.accounting.transaction.infrastructure.dao.TransactionDAO;
 import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import fr.pala.accounting.user.domain.model.UserModel;
 import org.junit.jupiter.api.Test;

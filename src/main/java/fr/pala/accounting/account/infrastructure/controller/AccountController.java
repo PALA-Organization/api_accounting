@@ -1,7 +1,7 @@
 package fr.pala.accounting.account.infrastructure.controller;
 
 import fr.pala.accounting.account.domain.model.Account;
-import fr.pala.accounting.account.use_case.AccountService;
+import fr.pala.accounting.account.service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

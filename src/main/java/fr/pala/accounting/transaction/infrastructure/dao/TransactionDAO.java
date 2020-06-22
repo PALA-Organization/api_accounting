@@ -1,8 +1,8 @@
-package fr.pala.accounting.transaction;
+package fr.pala.accounting.transaction.infrastructure.dao;
 
 import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
 import fr.pala.accounting.account.infrastructure.dao.AccountModel;
-import fr.pala.accounting.transaction.model.TransactionModel;
+import fr.pala.accounting.transaction.domain.model.TransactionModel;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -36,7 +36,7 @@ public class TransactionDAO {
 
         for (String transactions_id : transactions_ids) {
             Query query = new Query();
-            query.addCriteria(Criteria.where("transaction_id").is(transactions_id));
+            query.addCriteria(Criteria.where("id").is(transactions_id));
             transactionResults.add(mongoTemplate.findOne(query, TransactionModel.class));
         }
 
@@ -45,7 +45,7 @@ public class TransactionDAO {
 
     public TransactionModel getTransaction(String transaction_id) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("transaction_id").is(transaction_id));
+        query.addCriteria(Criteria.where("id").is(transaction_id));
         return mongoTemplate.findOne(query, TransactionModel.class);
     }
 
@@ -55,7 +55,7 @@ public class TransactionDAO {
         //add transaction to account
         AccountModel account = accountDAO.getAccountOfUser(email, account_id);
         List<String> transactions_ids = account.getTransactions_ids();
-        transactions_ids.add(transactionResult.getTransaction_id());
+        transactions_ids.add(transactionResult.getId());
         account.setTransactions_ids(transactions_ids);
         accountDAO.updateAccount(email, account_id, account);
         return transactionResult;
@@ -63,7 +63,7 @@ public class TransactionDAO {
 
     public void updateTransaction(TransactionModel transactionModel) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("transaction_id").is(transactionModel.getTransaction_id()));
+        query.addCriteria(Criteria.where("id").is(transactionModel.getId()));
         Update update = new Update();
         update.set("type", transactionModel.getType());
         update.set("shop_name", transactionModel.getShop_name());
@@ -83,7 +83,7 @@ public class TransactionDAO {
         List<String> transactions_ids = account.getTransactions_ids();
 
         for (int i = 0; i < transactions_ids.size(); i++) {
-            if(transactions_ids.get(i).equals(transaction.getTransaction_id())){
+            if(transactions_ids.get(i).equals(transaction.getId())){
                 transactions_ids.remove(i);
                 break;
             }

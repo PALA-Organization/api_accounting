@@ -2,8 +2,8 @@ package fr.pala.accounting.dao;
 
 import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
 import fr.pala.accounting.account.infrastructure.dao.AccountModel;
-import fr.pala.accounting.transaction.TransactionDAO;
-import fr.pala.accounting.transaction.model.TransactionModel;
+import fr.pala.accounting.transaction.infrastructure.dao.TransactionDAO;
+import fr.pala.accounting.transaction.domain.model.TransactionModel;
 import fr.pala.accounting.user.domain.model.UserModel;
 import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import org.junit.jupiter.api.Test;
@@ -84,7 +84,7 @@ public class TransactionDAOTest {
                 .setDescription("Test");
 
         Query query = new Query();
-        query.addCriteria(Criteria.where("transaction_id").is(transactionId));
+        query.addCriteria(Criteria.where("id").is(transactionId));
         Mockito.when(mongoTemplate.findOne(query, TransactionModel.class))
                 .then(ignoredInvocation -> transaction);
 
@@ -128,6 +128,6 @@ public class TransactionDAOTest {
 
         Mockito.when(mongoTemplate.save(Mockito.any(TransactionModel.class))).thenReturn(transaction);
 
-        assertThat(transactionDAO.addTransaction(email, account_id, transaction).getTransaction_id()).isEqualTo("223435345345");
+        assertThat(transactionDAO.addTransaction(email, account_id, transaction).getId()).isEqualTo("223435345345");
     }
 }

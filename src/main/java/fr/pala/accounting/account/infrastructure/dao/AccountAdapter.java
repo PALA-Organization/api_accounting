@@ -12,7 +12,6 @@ public class AccountAdapter {
     }
 
     public static Account modelToAccount(AccountModel accountModel) throws InvalidFieldException {
-        System.out.println(accountModel.getId() + accountModel.getAmount() + accountModel.getTransactions_ids());
         return new Account(accountModel.getId(), accountModel.getAmount(), accountModel.getTransactions_ids());
     }
 

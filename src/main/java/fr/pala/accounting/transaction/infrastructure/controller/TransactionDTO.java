@@ -1,4 +1,4 @@
-package fr.pala.accounting.transaction.model;
+package fr.pala.accounting.transaction.infrastructure.controller;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

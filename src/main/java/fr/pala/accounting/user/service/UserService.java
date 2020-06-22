@@ -1,9 +1,9 @@
 package fr.pala.accounting.user.service;
 
-import fr.pala.accounting.user.domain.exception.UserAlreadyExistsException;
 import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import fr.pala.accounting.user.infrastructure.controller.UserDTO;
 import fr.pala.accounting.user.domain.model.UserModel;
+import fr.pala.accounting.user.service.exception.UserAlreadyExistsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

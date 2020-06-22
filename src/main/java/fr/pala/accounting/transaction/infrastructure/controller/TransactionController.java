@@ -1,6 +1,7 @@
-package fr.pala.accounting.transaction;
+package fr.pala.accounting.transaction.infrastructure.controller;
 
-import fr.pala.accounting.ocr_space.OCRSpaceService;
+import fr.pala.accounting.transaction.service.TransactionService;
+import fr.pala.accounting.utils.ticket_scan.OCRSpaceScanTicket;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +15,9 @@ import static fr.pala.accounting.utils.file.downloadUtils.downloadImage;
 @RestController
 @RequestMapping("/account/{accountId}/transaction/")
 public class TransactionController {
-    private final OCRSpaceService ocrSpaceService;
     private final TransactionService transactionService;
 
-    public TransactionController(TransactionService transactionService, OCRSpaceService ocrSpaceService) {
-        this.ocrSpaceService = ocrSpaceService;
+    public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
 
@@ -53,7 +52,7 @@ public class TransactionController {
     @PostMapping("/scan")
     public ResponseEntity<String> singleFileUpload(@PathVariable("accountId") String accountId, @RequestParam("file") MultipartFile file, Principal principal) {
         Path filePath = downloadImage(file);
-        String uploadResult = ocrSpaceService.uploadAndFetchResult(filePath);
+        String uploadResult = OCRSpaceScanTicket.uploadAndFetchResult(filePath);
         String transactionId = transactionService.registerScanTransaction(principal.getName()
                 ,"None", "None", 10.0, "Unknown",
                 accountId); // TODO: Scan infos of uploadResult

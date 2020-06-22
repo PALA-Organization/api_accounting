@@ -1,12 +1,12 @@
-package fr.pala.accounting.account.use_case;
+package fr.pala.accounting.account.service;
 
 import fr.pala.accounting.account.domain.model.Account;
 import fr.pala.accounting.account.domain.model.InvalidFieldException;
-import fr.pala.accounting.account.infrastructure.controller.AccountNotCreatedException;
-import fr.pala.accounting.account.infrastructure.controller.AccountNotFetchedException;
 import fr.pala.accounting.account.infrastructure.dao.AccountAdapter;
 import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
 import fr.pala.accounting.account.infrastructure.dao.AccountModel;
+import fr.pala.accounting.account.service.exception.AccountNotCreatedException;
+import fr.pala.accounting.account.service.exception.AccountNotFetchedException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
