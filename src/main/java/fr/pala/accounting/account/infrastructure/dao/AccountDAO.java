@@ -2,6 +2,8 @@ package fr.pala.accounting.account.infrastructure.dao;
 
 import fr.pala.accounting.account.domain.model.Account;
 import fr.pala.accounting.account.domain.model.InvalidFieldException;
+import fr.pala.accounting.account.service.exception.AccountDoesNotExistException;
+import fr.pala.accounting.account.service.exception.AccountNotUpdatedException;
 import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import fr.pala.accounting.user.domain.model.UserModel;
 import org.bson.types.ObjectId;
@@ -77,28 +79,27 @@ public class AccountDAO {
                 break;
             }
         }
+
         return accountResult;
     }
 
 
 
-    public void updateAccount(String email, String account_id, AccountModel account) {
+    public Account updateAccount(String email, Account account) throws InvalidFieldException, AccountNotUpdatedException {
+        AccountModel accountModel = AccountAdapter.accountToModel(account);
         UserModel user = userDAO.getUserByEmail(email);
         List<AccountModel> accounts = user.getAccounts();
 
-        for (AccountModel accountModel : accounts) {
-            if (accountModel.getId().equals(account_id)) {
-                accountModel.setAmount(account.getAmount());
-                accountModel.setTransactions_ids(account.getTransactions_ids());
-                break;
-            }
-        }
+        accounts.replaceAll(acc -> acc.getId().equals(accountModel.getId()) ? accountModel : acc);
 
         Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(user.getUser_id()));
+        query.addCriteria(Criteria.where("email").is(user.getEmail()));
         Update update = new Update();
         update.set("accounts", accounts);
-        mongoTemplate.findAndModify(query, update, UserModel.class);
+        if (mongoTemplate.findAndModify(query, update, UserModel.class) != null) {
+            return AccountAdapter.modelToAccount(accountModel);
+        }
+        throw new AccountNotUpdatedException();
     }
 
     public void deleteAccount(String email, String account_id) {

@@ -27,15 +27,23 @@ public class Account {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Double getAmount() {
         return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     public List<String> getTransactions_ids() {
         return transactions_ids;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setTransactions_ids(List<String> transactions_ids) {
+        this.transactions_ids = transactions_ids;
     }
 }

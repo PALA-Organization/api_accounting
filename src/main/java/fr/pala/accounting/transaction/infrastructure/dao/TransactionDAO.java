@@ -1,10 +1,9 @@
 package fr.pala.accounting.transaction.infrastructure.dao;
 
-import fr.pala.accounting.account.infrastructure.dao.AccountModel;
+import fr.pala.accounting.account.domain.model.Account;
 import fr.pala.accounting.account.service.AccountService;
 import fr.pala.accounting.transaction.domain.model.InvalidFieldException;
 import fr.pala.accounting.transaction.domain.model.Transaction;
-import fr.pala.accounting.transaction.domain.model.TransactionModel;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -28,13 +27,13 @@ public class TransactionDAO {
 
     public List<TransactionModel> getAllTransactionsOfAccount(String user_id, String account_id) {
         List<TransactionModel> transactionResults = new ArrayList<TransactionModel>();
-        AccountModel accountModel = accountService.getAccountOfUser(user_id, account_id);
+        Account account = accountService.getAccount(user_id, account_id);
 
-        if(accountModel == null){
+        if (account == null) {
             return transactionResults;
         }
 
-        List<String> transactions_ids = accountModel.getTransactions_ids();
+        List<String> transactions_ids = account.getTransactions_ids();
 
         for (String transactions_id : transactions_ids) {
             Query query = new Query();
@@ -75,7 +74,7 @@ public class TransactionDAO {
 
         mongoTemplate.remove(transaction);
 
-        AccountModel account = accountDAO.getAccountOfUser(email, account_id);
+        Account account = accountService.getAccount(email, account_id);
         List<String> transactions_ids = account.getTransactions_ids();
 
         for (int i = 0; i < transactions_ids.size(); i++) {
@@ -85,7 +84,7 @@ public class TransactionDAO {
             }
         }
         account.setTransactions_ids(transactions_ids);
-        accountDAO.updateAccount(email, account_id, account);
+        accountService.updateAccount(email, account);
     }
 
 }

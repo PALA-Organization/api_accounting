@@ -1,5 +1,7 @@
 package fr.pala.accounting.account.infrastructure.dao;
 
+import fr.pala.accounting.account.domain.model.Account;
+import fr.pala.accounting.account.domain.model.InvalidFieldException;
 import fr.pala.accounting.transaction.infrastructure.dao.TransactionDAO;
 import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import fr.pala.accounting.user.domain.model.UserModel;
@@ -26,10 +28,10 @@ public class AccountDAOTest {
     private AccountDAO accountDAO;
 
     @Test
-    public void addAccountTest(){
+    public void addAccountTest() throws InvalidFieldException {
         // given
         String email = "test@test.fr";
-        AccountModel account = new AccountModel(null, 23.30, new ArrayList<>());
+        Account account = new Account(null, 23.30, new ArrayList<>());
 
         // when
         Query query = new Query();
@@ -45,7 +47,7 @@ public class AccountDAOTest {
     }
 
     @Test
-    public void getAllAccountsOfUsersByIdTest() {
+    public void getAllAccountsOfUsersByIdTest() throws InvalidFieldException {
         // given
         String user_id = "12";
 
@@ -67,7 +69,7 @@ public class AccountDAOTest {
 
 
     @Test
-    public void getAllAccountsOfUsersByEmailTest() {
+    public void getAllAccountsOfUsersByEmailTest() throws InvalidFieldException {
         // given
         String email = "test@test.fr";
 
@@ -88,7 +90,7 @@ public class AccountDAOTest {
     }
 
     @Test
-    public void getAccountOfUserTest() {
+    public void getAccountOfUserTest() throws InvalidFieldException {
         // given
         String email = "test@test.fr";
         String account_id = "13";
