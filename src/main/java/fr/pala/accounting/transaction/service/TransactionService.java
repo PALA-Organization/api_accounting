@@ -41,8 +41,8 @@ public class TransactionService {
 
             Account account = accountService.getAccount(email, accountId);
             List<String> transactions_ids = account.getTransactions_ids();
-            transactions_ids.add(transaction.getId());
-            account.updateAmount(transaction.getAmount());
+            transactions_ids.add(savedTransaction.getId());
+            account.updateAmount(savedTransaction.getAmount());
             account.setTransactions_ids(transactions_ids);
             accountService.updateAccount(email, account);
             return savedTransaction;
