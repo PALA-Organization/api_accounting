@@ -28,21 +28,28 @@ public class TransactionController {
 
 
     @RequestMapping("/addTransaction")
-    public String addTransaction(String user_id, String account_id, Double amount) {
+    public String addTransaction(Principal principal, String account_id, TransactionDTO transactionDTO) {
+        transactionService.createTransaction(principal.getName(),
+                account_id,
+                transactionDTO.getType(),
+                transactionDTO.getShop_name(),
+                transactionDTO.getShop_address(),
+                transactionDTO.getAmount(),
+                transactionDTO.getDescription());
         // TransactionModel transaction = new TransactionModel("1", "Restaurant", "McDo", "Clichy", new Date(), amount, "test");
         // transactionService.addTransaction(user_id, account_id, transaction);
         return "OK";
     }
 
     @RequestMapping("/updateTransaction")
-    public String updateTransaction(String user_id, String account_id, Double amount) {
+    public String updateTransaction(Principal principal, String account_id, Double amount) {
         // TransactionModel transaction = new TransactionModel("1", "Restaurant", "McDo", "Clichy", new Date(), amount, "test");
         // transactionService.addTransaction(user_id, account_id, transaction);
         return "OK";
     }
 
     @RequestMapping("/filter")
-    public String filter(String user_id, String type) {
+    public String filter(Principal principal, String type) {
         // filtrer par montant get dans transaction
         // id_user dans le token, parser tous les comptes, toutes les transactions sup à tant ou inf à tant
         // transaction/id_account qui va aller
@@ -50,7 +57,7 @@ public class TransactionController {
     }
 
     @PostMapping("/scan")
-    public ResponseEntity<String> singleFileUpload(@PathVariable("accountId") String accountId, @RequestParam("file") MultipartFile file, Principal principal) {
+    public ResponseEntity<String> singleFileUpload(Principal principal, @PathVariable("accountId") String accountId, @RequestParam("file") MultipartFile file) {
         Path filePath = downloadImage(file);
         String uploadResult = OCRSpaceScanTicket.uploadAndFetchResult(filePath);
         String transactionId = transactionService.registerScanTransaction(principal.getName()

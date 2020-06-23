@@ -22,4 +22,12 @@ public class AccountAdapter {
         }
         return accounts;
     }
+
+    public static List<AccountModel> transactionListToModelList(List<Account> accounts) {
+        List<AccountModel> accountModels = new ArrayList<>();
+        for (Account account : accounts) {
+            accountModels.add(accountToModel(account));
+        }
+        return accountModels;
+    }
 }

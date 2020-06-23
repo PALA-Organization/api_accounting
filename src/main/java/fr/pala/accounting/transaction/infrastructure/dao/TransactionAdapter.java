@@ -15,7 +15,7 @@ public class TransactionAdapter {
         return new Transaction(transactionModel.getId(), transactionModel.getType(), transactionModel.getShop_name(), transactionModel.getShop_address(), transactionModel.getDate(), transactionModel.getAmount(), transactionModel.getDescription());
     }
 
-    public static List<Transaction> modelListToAccountList(List<TransactionModel> transactionModels) throws InvalidFieldException {
+    public static List<Transaction> modelListToTransactionList(List<TransactionModel> transactionModels) throws InvalidFieldException {
         List<Transaction> transactions = new ArrayList<>();
         for (TransactionModel transactionModel : transactionModels) {
             transactions.add(modelToTransaction(transactionModel));

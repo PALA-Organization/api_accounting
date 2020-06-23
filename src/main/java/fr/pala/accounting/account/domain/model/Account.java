@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Account {
 
-    private final String id;
-    private final Double amount;
-    private final List<String> transactions_ids;
+    private String id;
+    private Double amount;
+    private List<String> transactions_ids;
 
     public Account(String id, Double amount, List<String> transactions_ids) throws InvalidFieldException {
         this.id = id;
@@ -14,6 +14,13 @@ public class Account {
         this.transactions_ids = transactions_ids;
 
         this.canBeSaved();
+    }
+
+    private Boolean canBeSaved() throws InvalidFieldException {
+        if (amount == null || transactions_ids == null) {
+            throw new InvalidFieldException();
+        }
+        return true;
     }
 
     public String getId() {
@@ -28,10 +35,7 @@ public class Account {
         return transactions_ids;
     }
 
-    private Boolean canBeSaved() throws InvalidFieldException {
-        if (amount == null || transactions_ids == null) {
-            throw new InvalidFieldException();
-        }
-        return true;
+    public void setId(String id) {
+        this.id = id;
     }
 }

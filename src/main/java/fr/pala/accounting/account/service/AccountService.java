@@ -4,7 +4,6 @@ import fr.pala.accounting.account.domain.model.Account;
 import fr.pala.accounting.account.domain.model.InvalidFieldException;
 import fr.pala.accounting.account.infrastructure.dao.AccountAdapter;
 import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
-import fr.pala.accounting.account.infrastructure.dao.AccountModel;
 import fr.pala.accounting.account.service.exception.AccountNotCreatedException;
 import fr.pala.accounting.account.service.exception.AccountNotFetchedException;
 import org.springframework.stereotype.Service;
@@ -24,19 +23,22 @@ public class AccountService {
         Account newAccount;
         try {
             newAccount = new Account(null, (double) 0, new ArrayList<>());
-            System.out.println(newAccount);
-            AccountModel newAccountModel = AccountAdapter.accountToModel(newAccount);
-            System.out.println(newAccountModel);
-            newAccountModel = accountDAO.addAccount(email, newAccountModel);
-            System.out.println(newAccountModel);
-            return AccountAdapter.modelToAccount(newAccountModel);
+            return accountDAO.addAccount(email, newAccount);
         } catch (InvalidFieldException e) {
             throw new AccountNotCreatedException();
         }
     }
 
+    public Account getAccount(String email, String account_id) {
+        try {
+            return accountDAO.getAccountOfUser(email, account_id);
+        } catch (InvalidFieldException e) {
+            throw new AccountNotFetchedException();
+        }
+    }
+
     public List<Account> getAccounts(String email) {
-        List<AccountModel> accountModels =  accountDAO.getAllAccountsOfUsersByEmail(email);
+        return accountDAO.getAllAccountsOfUserByEmail(email);
         try {
             return AccountAdapter.modelListToAccountList(accountModels);
         } catch (InvalidFieldException e) {

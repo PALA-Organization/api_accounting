@@ -1,7 +1,9 @@
 package fr.pala.accounting.transaction.infrastructure.dao;
 
-import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
 import fr.pala.accounting.account.infrastructure.dao.AccountModel;
+import fr.pala.accounting.account.service.AccountService;
+import fr.pala.accounting.transaction.domain.model.InvalidFieldException;
+import fr.pala.accounting.transaction.domain.model.Transaction;
 import fr.pala.accounting.transaction.domain.model.TransactionModel;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -14,19 +16,19 @@ import java.util.List;
 
 @Service
 public class TransactionDAO {
-    private final AccountDAO accountDAO;
+    private final AccountService accountService;
     private final MongoTemplate mongoTemplate;
 
 
-    public TransactionDAO(AccountDAO accountDAO, MongoTemplate mongoTemplate) {
-        this.accountDAO = accountDAO;
+    public TransactionDAO(AccountService accountService, MongoTemplate mongoTemplate) {
+        this.accountService = accountService;
         this.mongoTemplate = mongoTemplate;
     }
 
 
     public List<TransactionModel> getAllTransactionsOfAccount(String user_id, String account_id) {
         List<TransactionModel> transactionResults = new ArrayList<TransactionModel>();
-        AccountModel accountModel = accountDAO.getAccountOfUser(user_id, account_id);
+        AccountModel accountModel = accountService.getAccountOfUser(user_id, account_id);
 
         if(accountModel == null){
             return transactionResults;
@@ -49,16 +51,10 @@ public class TransactionDAO {
         return mongoTemplate.findOne(query, TransactionModel.class);
     }
 
-    public TransactionModel addTransaction(String email, String account_id, TransactionModel transactionModel) {
-        TransactionModel transactionResult = mongoTemplate.save(transactionModel);
-
-        //add transaction to account
-        AccountModel account = accountDAO.getAccountOfUser(email, account_id);
-        List<String> transactions_ids = account.getTransactions_ids();
-        transactions_ids.add(transactionResult.getId());
-        account.setTransactions_ids(transactions_ids);
-        accountDAO.updateAccount(email, account_id, account);
-        return transactionResult;
+    public Transaction addTransaction(Transaction transaction) throws InvalidFieldException {
+        final TransactionModel transactionModel = TransactionAdapter.transactionToModel(transaction);
+        final TransactionModel savedTransaction = mongoTemplate.save(transactionModel);
+        return TransactionAdapter.modelToTransaction(savedTransaction);
     }
 
     public void updateTransaction(TransactionModel transactionModel) {

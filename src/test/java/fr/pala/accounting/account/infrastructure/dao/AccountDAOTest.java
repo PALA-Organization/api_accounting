@@ -84,7 +84,7 @@ public class AccountDAOTest {
                 .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test", "test@test.fr", new Date(), new Date(), accounts));
 
         // then
-        assertThat(accountDAO.getAllAccountsOfUsersByEmail(email)).hasSize(2);
+        assertThat(accountDAO.getAllAccountsOfUserByEmail(email)).hasSize(2);
     }
 
     @Test
@@ -142,7 +142,7 @@ public class AccountDAOTest {
         update.set("accounts", accounts);
         Mockito.when(mongoTemplate.findAndModify(queryUser, update, UserModel.class)).thenReturn(userResult).then(accountsModified);
         // then
-        assertThat(accountDAO.getAllAccountsOfUsersByEmail(email)).isEqualTo(accountsModified);
+        assertThat(accountDAO.getAllAccountsOfUserByEmail(email)).isEqualTo(accountsModified);
     }
     */
 }
