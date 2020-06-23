@@ -1,4 +1,4 @@
-package fr.pala.accounting.transaction.service;
+package fr.pala.accounting.transaction.service.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

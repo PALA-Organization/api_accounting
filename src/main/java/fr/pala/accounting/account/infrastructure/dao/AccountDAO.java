@@ -2,10 +2,9 @@ package fr.pala.accounting.account.infrastructure.dao;
 
 import fr.pala.accounting.account.domain.model.Account;
 import fr.pala.accounting.account.domain.model.InvalidFieldException;
-import fr.pala.accounting.account.service.exception.AccountDoesNotExistException;
 import fr.pala.accounting.account.service.exception.AccountNotUpdatedException;
-import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import fr.pala.accounting.user.domain.model.UserModel;
+import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

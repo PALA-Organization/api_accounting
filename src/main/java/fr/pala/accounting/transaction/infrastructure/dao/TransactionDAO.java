@@ -4,6 +4,7 @@ import fr.pala.accounting.account.domain.model.Account;
 import fr.pala.accounting.account.service.AccountService;
 import fr.pala.accounting.transaction.domain.model.InvalidFieldException;
 import fr.pala.accounting.transaction.domain.model.Transaction;
+import fr.pala.accounting.transaction.service.exception.TransactionNotUpdatedException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -25,8 +26,8 @@ public class TransactionDAO {
     }
 
 
-    public List<TransactionModel> getAllTransactionsOfAccount(String user_id, String account_id) {
-        List<TransactionModel> transactionResults = new ArrayList<TransactionModel>();
+    public List<Transaction> getAllTransactionsOfAccount(String user_id, String account_id) throws InvalidFieldException {
+        List<Transaction> transactionResults = TransactionAdapter.modelListToTransactionList(new ArrayList<TransactionModel>());
         Account account = accountService.getAccount(user_id, account_id);
 
         if (account == null) {
@@ -38,16 +39,25 @@ public class TransactionDAO {
         for (String transactions_id : transactions_ids) {
             Query query = new Query();
             query.addCriteria(Criteria.where("id").is(transactions_id));
-            transactionResults.add(mongoTemplate.findOne(query, TransactionModel.class));
+            TransactionModel transactionModel = mongoTemplate.findOne(query, TransactionModel.class);
+            if (transactionModel != null) {
+                Transaction transaction = TransactionAdapter.modelToTransaction(transactionModel);
+                transactionResults.add(transaction);
+            }
+
         }
 
         return transactionResults;
     }
 
-    public TransactionModel getTransaction(String transaction_id) {
+    public Transaction getTransaction(String transaction_id) throws InvalidFieldException {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(transaction_id));
-        return mongoTemplate.findOne(query, TransactionModel.class);
+        TransactionModel transactionModel = mongoTemplate.findOne(query, TransactionModel.class);
+        if (transactionModel != null) {
+            return TransactionAdapter.modelToTransaction(transactionModel);
+        }
+        return null;
     }
 
     public Transaction addTransaction(Transaction transaction) throws InvalidFieldException {
@@ -56,7 +66,8 @@ public class TransactionDAO {
         return TransactionAdapter.modelToTransaction(savedTransaction);
     }
 
-    public void updateTransaction(TransactionModel transactionModel) {
+    public Transaction updateTransaction(Transaction transaction) throws InvalidFieldException {
+        TransactionModel transactionModel = TransactionAdapter.transactionToModel(transaction);
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(transactionModel.getId()));
         Update update = new Update();
@@ -67,7 +78,11 @@ public class TransactionDAO {
         update.set("amount", transactionModel.getAmount());
         update.set("description", transactionModel.getDescription());
 
-        mongoTemplate.findAndModify(query, update, TransactionModel.class);
+        TransactionModel updatedTransactionModel = mongoTemplate.findAndModify(query, update, TransactionModel.class);
+        if (updatedTransactionModel != null) {
+            return TransactionAdapter.modelToTransaction(updatedTransactionModel);
+        }
+        throw new TransactionNotUpdatedException();
     }
 
     public void deleteTransaction(String email, String account_id, TransactionModel transaction) {

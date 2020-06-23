@@ -46,4 +46,8 @@ public class Account {
     public void setTransactions_ids(List<String> transactions_ids) {
         this.transactions_ids = transactions_ids;
     }
+
+    public void updateAmount(Double amount) {
+        setAmount(getAmount() + amount);
+    }
 }

@@ -3,6 +3,7 @@ package fr.pala.accounting.transaction.dao;
 import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
 import fr.pala.accounting.account.infrastructure.dao.AccountModel;
 import fr.pala.accounting.account.service.AccountService;
+import fr.pala.accounting.transaction.domain.model.InvalidFieldException;
 import fr.pala.accounting.transaction.infrastructure.dao.TransactionDAO;
 import fr.pala.accounting.transaction.infrastructure.dao.TransactionModel;
 import fr.pala.accounting.user.domain.model.UserModel;
@@ -33,7 +34,7 @@ public class TransactionDAOTest {
     private TransactionDAO transactionDAO;
 
     @Test
-    public void getAllTransactionsOfNoAccountTest() {
+    public void getAllTransactionsOfNoAccountTest() throws InvalidFieldException {
         //Parameters of getAllTransactionsOfAccount
         String email = "test@test.fr";
         String account_id = "12";
@@ -50,7 +51,7 @@ public class TransactionDAOTest {
     }
 
     @Test
-    public void getAllTransactionsOfAccountTest() {
+    public void getAllTransactionsOfAccountTest() throws InvalidFieldException {
         //Parameters of getAllTransactionsOfAccount
         String email = "test@test.fr";
         String account_id = "12";
@@ -72,7 +73,7 @@ public class TransactionDAOTest {
     }
 
     @Test
-    public void getTransactionTest(){
+    public void getTransactionTest() throws InvalidFieldException {
         //parameters of getTransaction
         String transactionId = "223435345345";
 
