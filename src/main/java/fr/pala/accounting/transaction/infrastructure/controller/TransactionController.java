@@ -58,8 +58,13 @@ public class TransactionController {
     public ResponseEntity<String> addScanTransactionToAccount(Principal principal, @PathVariable("accountId") String accountId, @RequestParam("file") MultipartFile file) {
         Path filePath = downloadImage(file);
         String uploadResult = OCRSpaceScanTicket.uploadAndFetchResult(filePath);
-        String transactionId = transactionService.registerScanTransaction(principal.getName(), accountId
-                ,"None", "None", 10.0, uploadResult).getId(); // TODO: Scan infos of uploadResult
+        String transactionId = transactionService.createTransaction(principal.getName(),
+                accountId,
+                "Ticket",
+                "None",
+                "None",
+                10.0,
+                uploadResult).getId(); // TODO: Scan infos of uploadResult
         return new ResponseEntity<>(transactionId, HttpStatus.OK);
     }
 

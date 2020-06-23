@@ -51,10 +51,6 @@ public class TransactionService {
         }
     }
 
-    public Transaction registerScanTransaction(String email, String accountId, String shop_name, String shop_address, Double amount, String description) {
-        return createTransaction(email, accountId, "Ticket", shop_name, shop_address, amount, description);
-    }
-
     public List<Transaction> getAllTransactionsOfAccount(String email, String account_id) {
         try {
             return transactionDAO.getAllTransactionsOfAccount(email, account_id);
