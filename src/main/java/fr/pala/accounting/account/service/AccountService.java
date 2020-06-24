@@ -53,12 +53,9 @@ public class AccountService {
 
     public Account getAccount(String email, String account_id) {
         try {
-            Account account = accountDAO.getAccountOfUser(email, account_id);
-            if (account == null)
-                throw new AccountNotFoundException();
-            return account;
+            return accountDAO.getAccountOfUser(email, account_id);
         } catch (InvalidFieldException e) {
-            throw new AccountNotFetchedException();
+            throw new AccountNotFetchedException(e);
         }
     }
 

@@ -2,6 +2,7 @@ package fr.pala.accounting.account.infrastructure.dao;
 
 import fr.pala.accounting.account.domain.model.Account;
 import fr.pala.accounting.account.domain.model.InvalidFieldException;
+import fr.pala.accounting.account.service.AccountService;
 import fr.pala.accounting.transaction.infrastructure.dao.TransactionDAO;
 import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import fr.pala.accounting.user.domain.model.UserModel;
@@ -19,7 +20,7 @@ import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = { TransactionDAO.class, AccountDAO.class, UserDAO.class })
+@SpringBootTest(classes = { AccountService.class, TransactionDAO.class, AccountDAO.class, UserDAO.class })
 public class AccountDAOTest {
 
     @MockBean

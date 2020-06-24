@@ -4,6 +4,8 @@ import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
 import fr.pala.accounting.account.infrastructure.dao.AccountModel;
 import fr.pala.accounting.account.service.AccountService;
 import fr.pala.accounting.transaction.domain.model.InvalidFieldException;
+import fr.pala.accounting.transaction.domain.model.Transaction;
+import fr.pala.accounting.transaction.infrastructure.dao.TransactionAdapter;
 import fr.pala.accounting.transaction.infrastructure.dao.TransactionDAO;
 import fr.pala.accounting.transaction.infrastructure.dao.TransactionModel;
 import fr.pala.accounting.user.domain.model.UserModel;
@@ -48,6 +50,7 @@ public class TransactionDAOTest {
         //Mockito.when(accountDAO.getAccountOfUser(email, account_id)).then(ignoredInvocation -> new )
 
         assertThat(transactionDAO.getAllTransactionsOfAccount(email, account_id)).hasSize(0);
+
     }
 
     @Test
@@ -56,12 +59,14 @@ public class TransactionDAOTest {
         String email = "test@test.fr";
         String account_id = "12";
 
+        TransactionModel transactionModel = new TransactionModel("235","Test", "Test", "Test", null, 10D, "Test");
+        TransactionModel transactionModel2 = new TransactionModel("235","Test", "Test", "Test", null, 10D, "Test");
         //Mock the user get
         ArrayList<AccountModel> accounts = new ArrayList<>();
         ArrayList<String> transactionsIds = new ArrayList<String>();
-        transactionsIds.add("235");
-        transactionsIds.add("444");
-        AccountModel account = new AccountModel("12", 234.55, transactionsIds);
+        transactionsIds.add(transactionModel.getId());
+        transactionsIds.add(transactionModel2.getId());
+        AccountModel account = new AccountModel(account_id, 234.55, transactionsIds);
         accounts.add(account);
 
         Query query = new Query();
@@ -69,15 +74,22 @@ public class TransactionDAOTest {
         Mockito.when(mongoTemplate.findOne(query, UserModel.class))
                 .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test@test.fr", "test", new Date(), new Date(), accounts));
 
+        Query queryTransaction = new Query();
+        queryTransaction.addCriteria(Criteria.where("id").is(transactionModel.getId()));
+        Mockito.when(mongoTemplate.findOne(queryTransaction, TransactionModel.class)).thenReturn(transactionModel);
+        Query queryTransaction2 = new Query();
+        queryTransaction2.addCriteria(Criteria.where("id").is(transactionModel2.getId()));
+        Mockito.when(mongoTemplate.findOne(queryTransaction, TransactionModel.class)).thenReturn(transactionModel2);
+
         assertThat(transactionDAO.getAllTransactionsOfAccount(email, account_id)).hasSize(2);
     }
 
     @Test
     public void getTransactionTest() throws InvalidFieldException {
-        //parameters of getTransaction
+        // given
         String transactionId = "223435345345";
 
-        TransactionModel transaction = new TransactionModel()
+        TransactionModel transactionModel = new TransactionModel()
                 .setId("223435345345")
                 .setType("Test")
                 .setShop_name("Auchan")
@@ -86,11 +98,14 @@ public class TransactionDAOTest {
                 .setAmount(33.70)
                 .setDescription("Test");
 
+        // when
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(transactionId));
         Mockito.when(mongoTemplate.findOne(query, TransactionModel.class))
-                .then(ignoredInvocation -> transaction);
+                .thenReturn(transactionModel);
 
-        assertThat(transactionDAO.getTransaction(transactionId)).isEqualTo(transaction);
+        // then
+        Transaction transaction = TransactionAdapter.modelToTransaction(transactionModel);
+        assertThat(transactionDAO.getTransaction(transactionId).getId()).isEqualTo(transaction.getId());
     }
 }

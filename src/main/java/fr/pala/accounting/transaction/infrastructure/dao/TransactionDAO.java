@@ -29,7 +29,7 @@ public class TransactionDAO {
 
 
     public List<Transaction> getAllTransactionsOfAccount(String user_id, String account_id) throws InvalidFieldException, TransactionNotFoundException {
-        List<Transaction> transactionResults = TransactionAdapter.modelListToTransactionList(new ArrayList<TransactionModel>());
+        List<Transaction> transactionResults = new ArrayList<>();
         Account account = accountService.getAccount(user_id, account_id);
 
         if (account == null) {
@@ -42,13 +42,10 @@ public class TransactionDAO {
             Query query = new Query();
             query.addCriteria(Criteria.where("id").is(transaction_id));
             TransactionModel transactionModel = mongoTemplate.findOne(query, TransactionModel.class);
-            if (transactionModel == null) {
-                throw new TransactionDoesNotExistException(transaction_id);
+            if (transactionModel != null) {
+                Transaction transaction = TransactionAdapter.modelToTransaction(transactionModel);
+                transactionResults.add(transaction);
             }
-            Transaction transaction = TransactionAdapter.modelToTransaction(transactionModel);
-            transactionResults.add(transaction);
-
-
         }
 
         return transactionResults;
