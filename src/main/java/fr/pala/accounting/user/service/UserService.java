@@ -31,4 +31,8 @@ public class UserService {
         return userDAO.addUser(user);
     }
 
+    public boolean userExists(String email) {
+        return userDAO.getUserByEmail(email) != null; // TODO : Replace with a userDAO.exists(email);
+    }
+
 }

@@ -49,8 +49,7 @@ public class TransactionController {
                 transactionDTO.getShop_address(),
                 transactionDTO.getAmount(),
                 transactionDTO.getDescription()).getId();
-        // TransactionModel transaction = new TransactionModel("1", "Restaurant", "McDo", "Clichy", new Date(), amount, "test");
-        // transactionService.addTransaction(user_id, account_id, transaction);
+
         return ResponseEntity.ok(newTransactionId);
     }
 
@@ -65,6 +64,7 @@ public class TransactionController {
                 "None",
                 10.0,
                 uploadResult).getId(); // TODO: Scan infos of uploadResult
+
         return new ResponseEntity<>(transactionId, HttpStatus.OK);
     }
 
@@ -83,5 +83,15 @@ public class TransactionController {
                 transactionDTO.getAmount(),
                 transactionDTO.getDescription()).getId();
         return ResponseEntity.ok(updatedTransactionId);
+    }
+
+
+    @DeleteMapping("/{transactionId}")
+    public ResponseEntity<String> deleteTransaction(
+            Principal principal,
+            @PathVariable("accountId") @NotEmpty(message = "accountId must not be empty") String accountId,
+            @PathVariable("transactionId") @NotEmpty(message = "transactionId must not be empty") String transactionId) {
+        transactionService.deleteTransaction(principal.getName(), accountId, transactionId);
+        return ResponseEntity.ok().build();
     }
 }

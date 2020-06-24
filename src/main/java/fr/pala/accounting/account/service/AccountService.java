@@ -3,7 +3,7 @@ package fr.pala.accounting.account.service;
 import fr.pala.accounting.account.domain.model.Account;
 import fr.pala.accounting.account.domain.model.InvalidFieldException;
 import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
-import fr.pala.accounting.account.service.exception.AccountDoesNotExistException;
+import fr.pala.accounting.account.service.exception.AccountNotFoundException;
 import fr.pala.accounting.account.service.exception.AccountNotCreatedException;
 import fr.pala.accounting.account.service.exception.AccountNotFetchedException;
 import fr.pala.accounting.account.service.exception.AccountNotUpdatedException;
@@ -32,7 +32,6 @@ public class AccountService {
 
 
     public Account updateAccount(String email, Account account) {
-
         try {
             return accountDAO.updateAccount(email, account);
         } catch (InvalidFieldException e) {
@@ -56,7 +55,7 @@ public class AccountService {
         try {
             Account account = accountDAO.getAccountOfUser(email, account_id);
             if (account == null)
-                throw new AccountDoesNotExistException();
+                throw new AccountNotFoundException();
             return account;
         } catch (InvalidFieldException e) {
             throw new AccountNotFetchedException();
@@ -66,6 +65,8 @@ public class AccountService {
     public Double getAccountAmount(String email, String accountId) {
         try {
             Account account = accountDAO.getAccountOfUser(email, accountId);
+            if (account == null)
+                throw new AccountNotFoundException();
             return account.getAmount();
         } catch (InvalidFieldException e) {
             throw new AccountNotFetchedException();

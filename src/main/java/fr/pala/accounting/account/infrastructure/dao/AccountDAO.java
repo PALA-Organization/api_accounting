@@ -98,7 +98,7 @@ public class AccountDAO {
         if (mongoTemplate.findAndModify(query, update, UserModel.class) != null) {
             return AccountAdapter.modelToAccount(accountModel);
         }
-        throw new AccountNotUpdatedException();
+        throw new AccountNotUpdatedException("Account neither found nor modified");
     }
 
     public void deleteAccount(String email, String account_id) {
