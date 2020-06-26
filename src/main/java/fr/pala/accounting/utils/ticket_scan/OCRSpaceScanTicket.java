@@ -1,10 +1,10 @@
-package fr.pala.accounting.ocr_space;
+package fr.pala.accounting.utils.ticket_scan;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,18 +12,21 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Map;
 
-@Service
-public class OCRSpaceService {
-    @Value("${ocr.token}")
-    private String ocrToken;
+@Component
+public class OCRSpaceScanTicket {
+    private static String token;
 
-    public String uploadAndFetchResult(Path filePath) {
+    public OCRSpaceScanTicket(@Value("${ocr.token}") String token) {
+        OCRSpaceScanTicket.token = token;
+    }
+
+    public static String uploadAndFetchResult(Path filePath) {
         String url = "https://api.ocr.space/parse/image?language=fre";
 
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("apikey", ocrToken);
+        headers.set("apikey", token);
         headers.set("filetype", "PNG");
 
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);

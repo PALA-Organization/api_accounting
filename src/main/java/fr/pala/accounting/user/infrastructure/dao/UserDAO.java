@@ -1,6 +1,6 @@
 package fr.pala.accounting.user.infrastructure.dao;
 
-import fr.pala.accounting.user.domain.exception.UserAlreadyExistsException;
+import fr.pala.accounting.user.service.exception.UserAlreadyExistsException;
 import fr.pala.accounting.user.domain.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -9,8 +9,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service

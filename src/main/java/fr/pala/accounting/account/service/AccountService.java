@@ -1,12 +1,12 @@
-package fr.pala.accounting.account.use_case;
+package fr.pala.accounting.account.service;
 
 import fr.pala.accounting.account.domain.model.Account;
 import fr.pala.accounting.account.domain.model.InvalidFieldException;
-import fr.pala.accounting.account.infrastructure.controller.AccountNotCreatedException;
-import fr.pala.accounting.account.infrastructure.controller.AccountNotFetchedException;
-import fr.pala.accounting.account.infrastructure.dao.AccountAdapter;
 import fr.pala.accounting.account.infrastructure.dao.AccountDAO;
-import fr.pala.accounting.account.infrastructure.dao.AccountModel;
+import fr.pala.accounting.account.service.exception.AccountNotFoundException;
+import fr.pala.accounting.account.service.exception.AccountNotCreatedException;
+import fr.pala.accounting.account.service.exception.AccountNotFetchedException;
+import fr.pala.accounting.account.service.exception.AccountNotUpdatedException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,21 +24,24 @@ public class AccountService {
         Account newAccount;
         try {
             newAccount = new Account(null, (double) 0, new ArrayList<>());
-            System.out.println(newAccount);
-            AccountModel newAccountModel = AccountAdapter.accountToModel(newAccount);
-            System.out.println(newAccountModel);
-            newAccountModel = accountDAO.addAccount(email, newAccountModel);
-            System.out.println(newAccountModel);
-            return AccountAdapter.modelToAccount(newAccountModel);
+            return accountDAO.addAccount(email, newAccount);
         } catch (InvalidFieldException e) {
             throw new AccountNotCreatedException();
         }
     }
 
-    public List<Account> getAccounts(String email) {
-        List<AccountModel> accountModels =  accountDAO.getAllAccountsOfUsersByEmail(email);
+
+    public Account updateAccount(String email, Account account) {
         try {
-            return AccountAdapter.modelListToAccountList(accountModels);
+            return accountDAO.updateAccount(email, account);
+        } catch (InvalidFieldException e) {
+            throw new AccountNotUpdatedException(e);
+        }
+    }
+
+    public List<Account> getAllAccounts(String email) {
+        try {
+            return accountDAO.getAllAccountsOfUserByEmail(email);
         } catch (InvalidFieldException e) {
             throw new AccountNotCreatedException();
         }
@@ -48,17 +51,19 @@ public class AccountService {
         accountDAO.deleteAccount(email, accountId);
     }
 
-    public Account getAccount(String email, String accountId) {
+    public Account getAccount(String email, String account_id) {
         try {
-            return AccountAdapter.modelToAccount(accountDAO.getAccountOfUser(email, accountId));
+            return accountDAO.getAccountOfUser(email, account_id);
         } catch (InvalidFieldException e) {
-            throw new AccountNotFetchedException();
+            throw new AccountNotFetchedException(e);
         }
     }
 
     public Double getAccountAmount(String email, String accountId) {
         try {
-            Account account = AccountAdapter.modelToAccount(accountDAO.getAccountOfUser(email, accountId));
+            Account account = accountDAO.getAccountOfUser(email, accountId);
+            if (account == null)
+                throw new AccountNotFoundException();
             return account.getAmount();
         } catch (InvalidFieldException e) {
             throw new AccountNotFetchedException();

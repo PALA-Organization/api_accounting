@@ -1,6 +1,9 @@
 package fr.pala.accounting.account.infrastructure.dao;
 
-import fr.pala.accounting.transaction.TransactionDAO;
+import fr.pala.accounting.account.domain.model.Account;
+import fr.pala.accounting.account.domain.model.InvalidFieldException;
+import fr.pala.accounting.account.service.AccountService;
+import fr.pala.accounting.transaction.infrastructure.dao.TransactionDAO;
 import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import fr.pala.accounting.user.domain.model.UserModel;
 import org.junit.jupiter.api.Test;
@@ -17,7 +20,7 @@ import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = { TransactionDAO.class, AccountDAO.class, UserDAO.class })
+@SpringBootTest(classes = { AccountService.class, TransactionDAO.class, AccountDAO.class, UserDAO.class })
 public class AccountDAOTest {
 
     @MockBean
@@ -26,10 +29,10 @@ public class AccountDAOTest {
     private AccountDAO accountDAO;
 
     @Test
-    public void addAccountTest(){
+    public void addAccountTest() throws InvalidFieldException {
         // given
         String email = "test@test.fr";
-        AccountModel account = new AccountModel(null, 23.30, new ArrayList<>());
+        Account account = new Account(null, 23.30, new ArrayList<>());
 
         // when
         Query query = new Query();
@@ -45,7 +48,7 @@ public class AccountDAOTest {
     }
 
     @Test
-    public void getAllAccountsOfUsersByIdTest() {
+    public void getAllAccountsOfUsersByIdTest() throws InvalidFieldException {
         // given
         String user_id = "12";
 
@@ -67,7 +70,7 @@ public class AccountDAOTest {
 
 
     @Test
-    public void getAllAccountsOfUsersByEmailTest() {
+    public void getAllAccountsOfUsersByEmailTest() throws InvalidFieldException {
         // given
         String email = "test@test.fr";
 
@@ -84,11 +87,11 @@ public class AccountDAOTest {
                 .then(ignoredInvocation -> new UserModel("32352453234", "Test", "test", "test@test.fr", new Date(), new Date(), accounts));
 
         // then
-        assertThat(accountDAO.getAllAccountsOfUsersByEmail(email)).hasSize(2);
+        assertThat(accountDAO.getAllAccountsOfUserByEmail(email)).hasSize(2);
     }
 
     @Test
-    public void getAccountOfUserTest() {
+    public void getAccountOfUserTest() throws InvalidFieldException {
         // given
         String email = "test@test.fr";
         String account_id = "13";
@@ -142,7 +145,7 @@ public class AccountDAOTest {
         update.set("accounts", accounts);
         Mockito.when(mongoTemplate.findAndModify(queryUser, update, UserModel.class)).thenReturn(userResult).then(accountsModified);
         // then
-        assertThat(accountDAO.getAllAccountsOfUsersByEmail(email)).isEqualTo(accountsModified);
+        assertThat(accountDAO.getAllAccountsOfUserByEmail(email)).isEqualTo(accountsModified);
     }
     */
 }
