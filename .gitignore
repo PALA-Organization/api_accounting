@@ -45,6 +45,7 @@ out/
 *.iml
 *.ipr
 .idea_modules/
+.env
 
 ### NetBeans ###
 /nbproject/private/
