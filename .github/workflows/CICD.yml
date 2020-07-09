@@ -60,7 +60,7 @@ jobs:
     runs-on: self-hosted
     steps: 
       - name: Initliaze AWS env
-        run: eb use JeeServerBase-env
+        run: eb use ${{ secrets.AWS_ENVIRONMENT_NAME }}
         
       - name: Set env vars
         env:
