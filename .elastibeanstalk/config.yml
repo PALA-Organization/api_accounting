@@ -2,7 +2,7 @@ branch-defaults:
   default:
     environment: JeeServer-Api-Accounting
 environment-defaults:
-  JeeServerBase-env:
+  JeeServer-Api-Accounting:
     branch: null
     repository: null
 global:
