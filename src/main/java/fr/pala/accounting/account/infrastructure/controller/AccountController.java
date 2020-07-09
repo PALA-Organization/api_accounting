@@ -41,8 +41,9 @@ public class AccountController {
     }
 
     @RequestMapping("/filter")
-    public ResponseEntity<String> filter(Principal principal, String filter) {
+    public ResponseEntity<String> getAccountByFilter(Principal principal, AccountFilterType filter, int value) {
         // TODO : filtrer par max ou min montant de compte
+        accountService.getAllAccountsWithFilter(principal.getName(), filter, value);
         return ResponseEntity.noContent().build();
     }
 

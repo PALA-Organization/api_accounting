@@ -69,4 +69,14 @@ public class AccountService {
             throw new AccountNotFetchedException();
         }
     }
+    
+    public List<Account> getAllAccountsWithFilter(String name, AccountFilterType filter, int value) {
+        try {
+            List<Account> accountsToFilter = accountDAO.getAllAccountsOfUserByEmail(email);
+
+            // TODO : Switch and filter
+        } catch (InvalidFieldException e) {
+            throw new AccountNotCreatedException();
+        }
+    }
 }
