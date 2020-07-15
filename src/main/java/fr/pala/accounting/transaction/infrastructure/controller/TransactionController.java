@@ -62,8 +62,8 @@ public class TransactionController {
                 "Ticket",
                 "None",
                 "None",
-                10.0,
-                uploadResult).getId(); // TODO: Scan infos of uploadResult
+                0.0,
+                uploadResult).getId();
 
         return new ResponseEntity<>(transactionId, HttpStatus.OK);
     }
