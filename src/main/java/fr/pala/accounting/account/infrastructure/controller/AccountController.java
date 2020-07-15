@@ -26,7 +26,7 @@ public class AccountController {
     @PostMapping
     public ResponseEntity<String> addAccount(Principal principal) {
         String accountId = accountService.createAccount(principal.getName()).getId();
-        return ResponseEntity.ok(accountId + "Salut");
+        return ResponseEntity.ok(accountId);
     }
 
     @GetMapping("/{accountId}/amount")
