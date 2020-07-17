@@ -1,7 +1,10 @@
 package fr.pala.accounting.transaction.infrastructure.controller;
 
 import fr.pala.accounting.transaction.domain.model.Transaction;
-import fr.pala.accounting.transaction.service.TransactionService;
+import fr.pala.accounting.transaction.service.CreateTransaction;
+import fr.pala.accounting.transaction.service.DeleteTransaction;
+import fr.pala.accounting.transaction.service.GetAllTransactionsOfAccount;
+import fr.pala.accounting.transaction.service.UpdateTransaction;
 import fr.pala.accounting.utils.ticket_scan.OCRSpaceScanTicket;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,30 +22,28 @@ import static fr.pala.accounting.utils.file.downloadUtils.downloadImage;
 @RestController
 @RequestMapping("/account/{accountId}/transaction/")
 public class TransactionController {
-    private final TransactionService transactionService;
+    private final GetAllTransactionsOfAccount getAllTransactionsOfAccount;
+    private final CreateTransaction createTransaction;
+    private final DeleteTransaction deleteTransaction;
+    private final UpdateTransaction updateTransaction;
 
-    public TransactionController(TransactionService transactionService) {
-        this.transactionService = transactionService;
-    }
-
-    @GetMapping("/filter")
-    public String filter(Principal principal, String type) {
-        // filtrer par montant get dans transaction
-        // id_user dans le token, parser tous les comptes, toutes les transactions sup à tant ou inf à tant
-        // transaction/id_account qui va aller
-        return "OK";
+    public TransactionController(GetAllTransactionsOfAccount getAllTransactionsOfAccount, CreateTransaction createTransaction, DeleteTransaction deleteTransaction, UpdateTransaction updateTransaction) {
+        this.getAllTransactionsOfAccount = getAllTransactionsOfAccount;
+        this.createTransaction = createTransaction;
+        this.deleteTransaction = deleteTransaction;
+        this.updateTransaction = updateTransaction;
     }
 
     @GetMapping
     public ResponseEntity<List<Transaction>> getAllTransactionsOfAccount(Principal principal, @PathVariable("accountId") @NotEmpty(message = "account_id must not be empty") String account_id) {
-        List<Transaction> transactionList = transactionService.getAllTransactionsOfAccount(principal.getName(), account_id);
+        List<Transaction> transactionList = getAllTransactionsOfAccount.getAllTransactionsOfAccount(principal.getName(), account_id);
         return ResponseEntity.ok(transactionList);
     }
 
     @PostMapping
     public ResponseEntity<String> addTransactionToAccount(Principal principal, @PathVariable("accountId") @NotEmpty(message = "account_id must not be empty")
             String account_id, @RequestBody @Valid TransactionDTO transactionDTO) {
-        String newTransactionId = transactionService.createTransaction(principal.getName(),
+        String newTransactionId = createTransaction.createTransaction(principal.getName(),
                 account_id,
                 transactionDTO.getType(),
                 transactionDTO.getShop_name(),
@@ -57,7 +58,7 @@ public class TransactionController {
     public ResponseEntity<String> addScanTransactionToAccount(Principal principal, @PathVariable("accountId") String accountId, @RequestParam("file") MultipartFile file) {
         Path filePath = downloadImage(file);
         String uploadResult = OCRSpaceScanTicket.uploadAndFetchResult(filePath);
-        String transactionId = transactionService.createTransaction(principal.getName(),
+        String transactionId = createTransaction.createTransaction(principal.getName(),
                 accountId,
                 "Ticket",
                 "None",
@@ -74,7 +75,7 @@ public class TransactionController {
             @PathVariable("accountId") @NotEmpty(message = "accountId must not be empty") String accountId,
             @PathVariable("transactionId") @NotEmpty(message = "transactionId must not be empty") String transactionId,
             @RequestBody @Valid TransactionDTO transactionDTO) {
-        String updatedTransactionId = transactionService.updateTransaction(principal.getName(),
+        String updatedTransactionId = updateTransaction.updateTransaction(principal.getName(),
                 accountId,
                 transactionId,
                 transactionDTO.getType(),
@@ -91,7 +92,7 @@ public class TransactionController {
             Principal principal,
             @PathVariable("accountId") @NotEmpty(message = "accountId must not be empty") String accountId,
             @PathVariable("transactionId") @NotEmpty(message = "transactionId must not be empty") String transactionId) {
-        transactionService.deleteTransaction(principal.getName(), accountId, transactionId);
+        deleteTransaction.deleteTransaction(principal.getName(), accountId, transactionId);
         return ResponseEntity.ok().build();
     }
 }

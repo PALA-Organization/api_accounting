@@ -1,7 +1,7 @@
 package fr.pala.accounting.user.infrastructure.controller;
 
 import fr.pala.accounting.user.service.exception.UserAlreadyExistsException;
-import fr.pala.accounting.user.service.UserService;
+import fr.pala.accounting.user.service.CreateUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,17 +16,17 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
+    private final CreateUser createUser;
 
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(CreateUser createUser) {
+        this.createUser = createUser;
     }
 
     @PostMapping("/create")
     public ResponseEntity<String> createAccount(@Valid @RequestBody UserDTO userDTO) {
         try{
-            userService.createUser(userDTO);
+            createUser.createUser(userDTO);
         }
         catch (UserAlreadyExistsException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);

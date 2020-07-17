@@ -1,6 +1,6 @@
 package fr.pala.accounting.user.dao;
 
-import fr.pala.accounting.account.infrastructure.dao.AccountModel;
+import fr.pala.accounting.account.infrastructure.dao.AccountMongoModel;
 import fr.pala.accounting.user.domain.model.UserModel;
 import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class UserDAOTest {
     @Test
     public void addUserTest() {
 
-        ArrayList<AccountModel> accounts = new ArrayList<>();
+        ArrayList<AccountMongoModel> accounts = new ArrayList<>();
         UserModel user = new UserModel("", "Test", "test@test.fr", "test", new Date(), new Date(), accounts);
         UserModel userResult = new UserModel("23424524523412", "Test", "test@test.fr", "test", new Date(), new Date(), accounts);
 
@@ -44,7 +44,7 @@ public class UserDAOTest {
 
     @Test
     public void getAllUsersTest() {
-        ArrayList<AccountModel> accounts = new ArrayList<>();
+        ArrayList<AccountMongoModel> accounts = new ArrayList<>();
 
         Mockito.when(mongoTemplate.findAll(UserModel.class))
                 .then(ignoredInvocation -> Arrays.asList(new UserModel("", "Test", "test@test.fr", "test", new Date(), new Date(), accounts),
@@ -56,7 +56,7 @@ public class UserDAOTest {
     @Test
     public void getUserByIdTest(){
         String user_id= "34234234234";
-        ArrayList<AccountModel> accounts = new ArrayList<>();
+        ArrayList<AccountMongoModel> accounts = new ArrayList<>();
 
         Query query = new Query();
         query.addCriteria(Criteria.where("user_id").is(user_id));

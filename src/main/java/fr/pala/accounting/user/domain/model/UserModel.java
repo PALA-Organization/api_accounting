@@ -1,6 +1,6 @@
 package fr.pala.accounting.user.domain.model;
 
-import fr.pala.accounting.account.infrastructure.dao.AccountModel;
+import fr.pala.accounting.account.infrastructure.dao.AccountMongoModel;
 
 import lombok.Data;
 import lombok.Getter;
@@ -27,9 +27,9 @@ public class UserModel {
 
     private Date created;
     private Date last_connection;
-    private List<AccountModel> accounts;
+    private List<AccountMongoModel> accounts;
 
-    public UserModel(String user_id, String name, String email, String password, Date created, Date last_connection, List<AccountModel> accounts){
+    public UserModel(String user_id, String name, String email, String password, Date created, Date last_connection, List<AccountMongoModel> accounts){
         this.user_id = user_id;
         this.name = name;
         this.email = email;

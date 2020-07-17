@@ -14,7 +14,7 @@ import java.util.Date;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionModel {
+public class TransactionMongoModel {
 
     @Id
     private String id;

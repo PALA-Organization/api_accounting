@@ -10,14 +10,14 @@ import java.util.List;
 @Document(collection = "Account")
 @Getter
 @Setter
-public class AccountModel {
+public class AccountMongoModel {
 
     @Id
     private String id;
     private Double amount;
     private List<String> transactions_ids;
 
-    public AccountModel(String id, Double amount, List<String> transactions_ids){
+    public AccountMongoModel(String id, Double amount, List<String> transactions_ids){
         this.id = id;
         this.amount = amount;
         this.transactions_ids = transactions_ids;

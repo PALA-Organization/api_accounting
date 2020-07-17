@@ -2,7 +2,7 @@ package fr.pala.accounting.account.infrastructure.dao;
 
 import fr.pala.accounting.account.domain.model.Account;
 import fr.pala.accounting.account.domain.model.InvalidFieldException;
-import fr.pala.accounting.account.service.AccountService;
+import fr.pala.accounting.account.service.GetAccount;
 import fr.pala.accounting.transaction.infrastructure.dao.TransactionDAO;
 import fr.pala.accounting.user.infrastructure.dao.UserDAO;
 import fr.pala.accounting.user.domain.model.UserModel;
@@ -20,7 +20,7 @@ import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = { AccountService.class, TransactionDAO.class, AccountDAO.class, UserDAO.class })
+@SpringBootTest(classes = { GetAccount.class, TransactionDAO.class, AccountDAO.class, UserDAO.class })
 public class AccountDAOTest {
 
     @MockBean
@@ -38,10 +38,10 @@ public class AccountDAOTest {
         Query query = new Query();
         query.addCriteria(Criteria.where("email").is(email));
         Mockito.when(mongoTemplate.findOne(query, UserModel.class))
-                .then(ignoredInvocation -> new UserModel("234", "Test", "test@test.fr", "test", new Date(), new Date(), new ArrayList<AccountModel>()));
+                .then(ignoredInvocation -> new UserModel("234", "Test", "test@test.fr", "test", new Date(), new Date(), new ArrayList<AccountMongoModel>()));
 
-        AccountModel accountResult = new AccountModel("34234234", 23.30, new ArrayList<>());
-        Mockito.when(mongoTemplate.save(Mockito.any(AccountModel.class))).thenReturn(accountResult);
+        AccountMongoModel accountResult = new AccountMongoModel("34234234", 23.30, new ArrayList<>());
+        Mockito.when(mongoTemplate.save(Mockito.any(AccountMongoModel.class))).thenReturn(accountResult);
 
         // then
         assertThat(accountDAO.addAccount(email, account).getAmount()).isEqualTo(23.30);
@@ -52,11 +52,11 @@ public class AccountDAOTest {
         // given
         String user_id = "12";
 
-        AccountModel account = new AccountModel("", 234.55, new ArrayList<String>());
-        AccountModel account2 = new AccountModel("", 234.55,  new ArrayList<String>());
+        AccountMongoModel account = new AccountMongoModel("", 234.55, new ArrayList<String>());
+        AccountMongoModel account2 = new AccountMongoModel("", 234.55,  new ArrayList<String>());
 
         // when
-        ArrayList<AccountModel> accounts = new ArrayList<>();
+        ArrayList<AccountMongoModel> accounts = new ArrayList<>();
         accounts.add(account);
         accounts.add(account2);
         Query query = new Query();
@@ -74,11 +74,11 @@ public class AccountDAOTest {
         // given
         String email = "test@test.fr";
 
-        AccountModel account = new AccountModel("", 234.55, new ArrayList<String>());
-        AccountModel account2 = new AccountModel("", 234.55,  new ArrayList<String>());
+        AccountMongoModel account = new AccountMongoModel("", 234.55, new ArrayList<String>());
+        AccountMongoModel account2 = new AccountMongoModel("", 234.55,  new ArrayList<String>());
 
         // when
-        ArrayList<AccountModel> accounts = new ArrayList<>();
+        ArrayList<AccountMongoModel> accounts = new ArrayList<>();
         accounts.add(account);
         accounts.add(account2);
         Query query = new Query();
@@ -97,13 +97,13 @@ public class AccountDAOTest {
         String account_id = "13";
 
         // when
-        AccountModel account = new AccountModel(account_id, 234.55, new ArrayList<String>());
+        AccountMongoModel account = new AccountMongoModel(account_id, 234.55, new ArrayList<String>());
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(account_id));
-        Mockito.when(mongoTemplate.findOne(query, AccountModel.class))
+        Mockito.when(mongoTemplate.findOne(query, AccountMongoModel.class))
                 .then(ignoredInvocation -> account);
 
-        ArrayList<AccountModel> accounts = new ArrayList<>();
+        ArrayList<AccountMongoModel> accounts = new ArrayList<>();
         accounts.add(account);
         Query query1 = new Query();
         query1.addCriteria(Criteria.where("email").is(email));
@@ -123,11 +123,11 @@ public class AccountDAOTest {
         String accountId = new ObjectId().toString();
         String account2Id = new ObjectId().toString();
 
-        AccountModel account = new AccountModel(accountId, 23.30, new ArrayList<>());
-        AccountModel accountToDelete = new AccountModel(account2Id, 234.55,  new ArrayList<String>());
+        AccountMongoModel account = new AccountMongoModel(accountId, 23.30, new ArrayList<>());
+        AccountMongoModel accountToDelete = new AccountMongoModel(account2Id, 234.55,  new ArrayList<String>());
 
         // when
-        ArrayList<AccountModel> accounts = new ArrayList<>();
+        ArrayList<AccountMongoModel> accounts = new ArrayList<>();
         accounts.add(account);
         accounts.add(accountToDelete);
         Query query = new Query();
@@ -137,7 +137,7 @@ public class AccountDAOTest {
 
         Query queryUser = new Query();
         queryUser.addCriteria(Criteria.where("_id").is(user_id));
-        ArrayList<AccountModel> accountsModified = new ArrayList<>();
+        ArrayList<AccountMongoModel> accountsModified = new ArrayList<>();
         accountsModified.add(account);
         UserModel userResult = new UserModel(user_id, "Test", "test@test.fr", "test", new Date(), new Date(), accountsModified);
 

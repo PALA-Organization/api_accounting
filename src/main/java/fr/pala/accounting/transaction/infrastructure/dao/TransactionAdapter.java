@@ -7,18 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionAdapter {
-    public static TransactionModel transactionToModel(Transaction transaction) {
-        return new TransactionModel(transaction.getId(), transaction.getType(), transaction.getShop_name(), transaction.getShop_address(), transaction.getDate(), transaction.getAmount(), transaction.getDescription());
+    public static TransactionMongoModel transactionToModel(Transaction transaction) {
+        return new TransactionMongoModel(transaction.getId(), transaction.getType(), transaction.getShop_name(), transaction.getShop_address(), transaction.getDate(), transaction.getAmount(), transaction.getDescription());
     }
 
-    public static Transaction modelToTransaction(TransactionModel transactionModel) throws InvalidFieldException {
-        return new Transaction(transactionModel.getId(), transactionModel.getType(), transactionModel.getShop_name(), transactionModel.getShop_address(), transactionModel.getDate(), transactionModel.getAmount(), transactionModel.getDescription());
+    public static Transaction modelToTransaction(TransactionMongoModel transactionMongoModel) throws InvalidFieldException {
+        return new Transaction(transactionMongoModel.getId(), transactionMongoModel.getType(), transactionMongoModel.getShop_name(), transactionMongoModel.getShop_address(), transactionMongoModel.getDate(), transactionMongoModel.getAmount(), transactionMongoModel.getDescription());
     }
 
-    public static List<Transaction> modelListToTransactionList(List<TransactionModel> transactionModels) throws InvalidFieldException {
+    public static List<Transaction> modelListToTransactionList(List<TransactionMongoModel> transactionMongoModels) throws InvalidFieldException {
         List<Transaction> transactions = new ArrayList<>();
-        for (TransactionModel transactionModel : transactionModels) {
-            transactions.add(modelToTransaction(transactionModel));
+        for (TransactionMongoModel transactionMongoModel : transactionMongoModels) {
+            transactions.add(modelToTransaction(transactionMongoModel));
         }
         return transactions;
     }

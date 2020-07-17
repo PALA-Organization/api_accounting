@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @Service
-public class UserService {
+public class CreateUser {
     private final UserDAO userDAO;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(PasswordEncoder passwordEncoder, UserDAO userDAO) {
+    public CreateUser(PasswordEncoder passwordEncoder, UserDAO userDAO) {
         this.passwordEncoder = passwordEncoder;
         this.userDAO = userDAO;
     }
